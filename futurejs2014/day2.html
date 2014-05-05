@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>andrewslotin.github.io</title>
+
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/code.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+
+  <body class="futurejs2014 futurejs2014_day2">
+    <article>
+      <h1>FutureJS</h1>
+
+<p><em>May 3rd, 2014, Barcelona, Spain</em></p>
+
+<ol>
+<li><a href="#1">JS.Next and Coffeescript</a></li>
+<li><a href="#2">The Javascript of tomorrow, today</a></li>
+<li><a href="#3">How to build front-end web apps that scale</a></li>
+<li><a href="#4">Streaming and event-based programming using FRP and RxJS</a></li>
+<li><a href="#5">Web components — a whirlwind tour thru the future of the Web</a></li>
+<li><a href="#6">My girlfriend is a crypto-anarchist and she doesn&rsquo;t even know it</a></li>
+<li><a href="#7">The secrets of React&rsquo;s virtual DOM</a></li>
+<li><a href="#8">Terra.js — a semantic terrain engine</a></li>
+</ol>
+
+<p><a name="1"></a></p>
+
+<h2>JS.Next and Coffeescript</h2>
+
+<p><em><a href="https://github.com/jashkenas">Jeremy Ashkenas</a> — creator of CoffeeScript</em></p>
+
+<blockquote>
+<p>Programming is awesome, yay!</p>
+</blockquote>
+
+<p><a name="2"></a></p>
+
+<h2>The Javascript of Tomorrow, Today</h2>
+
+<p><em><a href="https://github.com/pdubroy">Patrick Dubroy</a> — Chrome team</em></p>
+
+<p>Coming in ES6 (Harmony):</p>
+
+<ul>
+<li>Classes and modules</li>
+<li>Arrow functions</li>
+<li>Destructuring assignment</li>
+<li><p>Generators and iterators</p></li>
+<li><p>Promises</p></li>
+<li><p>Map, WeakMap and Set</p></li>
+<li><p>New Math functions</p></li>
+</ul>
+
+<p><em>Shortly: ES6 basically is Coffeescript.</em></p>
+
+<p><a href="https://github.com/google/traceur-compiler">Traceur</a> compiles Javascript.js to the Javascript-of-today.</p>
+
+<p>More on Generators:</p>
+
+<ul>
+<li><a href="http://taskjs.org">Task.js</a>: Beautiful concurrency for Javascript</li>
+<li><a href="https://facebook.github.io/regenerator">Regenerator</a></li>
+</ul>
+
+<p><a name="3"></a></p>
+
+<h2>How to Build Front-end Web Apps That Scale</h2>
+
+<p><em><a href="https://github.com/leggetter">Phil Leggetter</a></em></p>
+
+<p>What makes front-end apps so complicated:</p>
+
+<ul>
+<li>Large Single Page Applications (SPAs)</li>
+<li>Complex functionality</li>
+<li>Complex iteractions
+
+<ul>
+<li>User</li>
+<li>Technology</li>
+</ul></li>
+<li>Opened for the whole day</li>
+</ul>
+
+<p>The Solutions:</p>
+
+<ol>
+<li>Components/Widgest/modules</li>
+</ol>
+
+<p>Group assets by feature:</p>
+<pre class="highlight plaintext">   assets/stylesheets     assets/my-widget/*.css
+   assets/javascripts  →  assets/my-widget/*.js
+   ...                    ...
+</pre>
+
+<ol>
+<li>A Services Layer</li>
+</ol>
+
+<blockquote>
+<p>Services are a Contract/Protocol/Interface being used for to access shared resources.</p>
+</blockquote>
+
+<ul>
+<li>Features should not directly communicate</li>
+<li>Easily change implementation</li>
+<li>Mocks/Stubs</li>
+</ul>
+
+<ol>
+<li>MV*</li>
+</ol>
+
+<p>Decouple the view and exclude it from testing.
+4. Efficient testing — quick and reliable
+5. Tools</p>
+
+<ul>
+<li>Define workflow &amp; promote consistency</li>
+<li>Scaffolding</li>
+<li>Dev Server</li>
+<li>Builds/Bundling</li>
+<li>Dependency Analysis</li>
+</ul>
+
+<p><a name="4"></a></p>
+
+<h2>Streaming and Event-based Programming Using FRP and RxJS</h2>
+
+<p><em><a href="https://github.com/mattpodwysocki">Matthew Podwysocki</a></em></p>
+
+<ul>
+<li>Push-based code with <code>Observers</code></li>
+</ul>
+
+<p>Don&rsquo;t do this:</p>
+<pre class="highlight javascript">  <span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="c1">// do stuff
+</span>    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">recoverOrExit</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">doCleanup</span><span class="p">()</span>
+  <span class="p">});</span>
+</pre>
+
+<p>Do that instead:</p>
+<pre class="highlight javascript">  <span class="kd">var</span> <span class="nx">collection</span> <span class="o">=</span> <span class="nx">Observable</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">observer</span>   <span class="o">=</span> <span class="nx">Observer</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span>
+                     <span class="nx">OnNext</span><span class="err">:</span>   <span class="nx">nextHandler</span><span class="p">,</span>
+                     <span class="nx">OnCreate</span><span class="err">:</span> <span class="nx">createHandler</span><span class="p">,</span>
+                     <span class="nx">OnError</span><span class="err">:</span>  <span class="nx">errorHandler</span>
+                   <span class="p">)</span>
+
+  <span class="nx">subscription</span> <span class="o">=</span> <span class="nx">observer</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">collection</span><span class="p">);</span>
+  <span class="nx">subscription</span><span class="p">.</span><span class="nx">dispose</span><span class="p">();</span> <span class="c1">// do cleanup
+</span></pre>
+
+<ul>
+<li>Immutable data.</li>
+<li>Compose events and promises.</li>
+<li>Due to non-deterministic nature, testing more focused on results rather than steps.</li>
+</ul>
+
+<p>More on <a href="http://www.reactive-streams.org">Reactive Streams</a>.</p>
+
+<p><a name="5"></a></p>
+
+<h2>Web Components — a Whirlwind Tour Thru the Future of the Web</h2>
+
+<p><em><a href="https://github.com/martin-naumann">Martin Naumann</a></em></p>
+
+<p>Web components standards:</p>
+
+<ul>
+<li>Template element</li>
+</ul>
+
+<p>E.g.</p>
+<pre class="highlight html">  <span class="c">&lt;!-- Template --&gt;</span>
+  <span class="nt">&lt;template&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">select=</span><span class="s">".title"</span><span class="nt">&gt;&lt;/h1&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">select=</span><span class="s">".body"</span><span class="nt">&gt;&lt;/p&gt;</span>
+  <span class="nt">&lt;/template&gt;</span>
+
+  <span class="c">&lt;!-- This is how you add previously registered component "my-component" --&gt;</span>
+  <span class="nt">&lt;my</span><span class="na">-component</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"title"</span><span class="nt">&gt;</span>Goes to <span class="ni">&amp;lt;</span>h1<span class="ni">&amp;gt;</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"body"</span><span class="nt">&gt;</span>Goes to <span class="ni">&amp;lt;</span>p<span class="ni">&amp;gt;</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Won't be rendered!<span class="nt">&lt;/p&gt;</span>
+  <span class="err">&lt;</span>/my-component&gt;
+</pre>
+
+<ul>
+<li>Shadow DOM</li>
+</ul>
+
+<p>A DOM tree that is &ldquo;disconnected&rdquo; from the <code>document</code>&rsquo;s DOM.</p>
+<pre class="highlight javascript">  <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'div'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">root</span>      <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">createShadowRoot</span><span class="p">();</span> <span class="c1">// ← behold!
+</span></pre>
+
+<p><strong>HOW COOL IS THAT???</strong></p>
+
+<ul>
+<li>Custom elements</li>
+</ul>
+<pre class="highlight javascript">  <span class="kd">var</span> <span class="nx">elemPrototype</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">HTMLElement</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="nx">elemPrototype</span><span class="p">.</span><span class="nx">createdCallback</span> <span class="o">=</span> <span class="p">...;</span> <span class="c1">// Will be called on element create
+</span>
+  <span class="c1">// The name should be unique within the page
+</span>  <span class="kd">var</span> <span class="nx">XHeadline</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">registerElement</span><span class="p">(</span><span class="s2">"my-component"</span><span class="p">,</span> <span class="p">{</span> <span class="na">prototype</span><span class="p">:</span> <span class="nx">elemPrototype</span> <span class="p">});</span>
+</pre>
+
+<p>And than somewhere in HTML:</p>
+<pre class="highlight html">  <span class="nt">&lt;my</span><span class="na">-component</span><span class="nt">&gt;</span><span class="err">&lt;</span>/my-component&gt;
+</pre>
+
+<ul>
+<li>HTML imports</li>
+</ul>
+
+<p><strong>Polyfill &amp; frameworks:</strong></p>
+
+<ul>
+<li><a href="http://www.polymer-project.org/">Polymer</a></li>
+<li><a href="http://www.x-tags.org/">X-Tags</a></li>
+</ul>
+
+<p><strong>Try it:</strong></p>
+
+<ul>
+<li><a href="http://mozilla.github.io/brick/">Brick</a></li>
+<li><a href="http://customelements.io/">CustomElement.io</a></li>
+<li><a href="https://apps.webmaker.org/">Mozilla AppMaker</a></li>
+</ul>
+
+<p><a name="6"></a></p>
+
+<h2>My Girlfriend is a Crypto-anarchist and She Doesn&rsquo;t Even Know It</h2>
+
+<p><em><a href="https://github.com/malditogeek">Mauro Pompilio</a></em></p>
+
+<blockquote>
+<p>My girlfriend flashes boobs to me via WebRTC-powered video chat, because I don&rsquo;t want a guy from NSA to stare on them.</p>
+</blockquote>
+
+<p><a name="7"></a></p>
+
+<h2>The Secrets of React&rsquo;s Virtual DOM</h2>
+
+<p><em><a href="https://github.com/petehunt">Pete Hunt</a> — React main contributor</em></p>
+
+<p>What makes UIs difficult to build?</p>
+
+<ul>
+<li>&gt; It just doesn&rsquo;t feel right&quot;</li>
+<li>Even with test driven development you often need a human to verify</li>
+<li>UIs are deceptively complex</li>
+<li>Try to be reliable.</li>
+<li>They should at least break the same way every time.</li>
+</ul>
+
+<h3>How do we make UIs more reliable?</h3>
+
+<ul>
+<li>Data binding is what we do now</li>
+<li>Data binding makes the UI (a dynamic process) look like a static process.</li>
+<li>It&rsquo;s a polyfill for reactive JS in the DOM</li>
+<li>One of the solutions for syncing states is reactive programming.</li>
+<li>JS isn&rsquo;t actually reactive, so we need a non-trivial abstraction. This will be leaky.</li>
+</ul>
+
+<h3>Key value observation</h3>
+
+<ul>
+<li>The most popular way to handle binding today, pretty much every lib except Angular</li>
+<li>Observables &amp; computed properties are what this is built on</li>
+<li>Ember is probably the premier way to implement this style. &ldquo;If Ember can&rsquo;t make KVO simple, then who can?&rdquo;</li>
+<li>With templating, you don&rsquo;t have a very expressive toolset to control flow.</li>
+<li>In Ember, you often have to know the implementation in order to do what you want.</li>
+<li>For deep observation, you have to use special notations, units of composition that the system gives you.</li>
+</ul>
+
+<h3>Dirty Checking</h3>
+
+<ul>
+<li>Angular composes pieces of functionality as directives.</li>
+<li>You still have to know the implementation, a domain specific language, essentially.</li>
+</ul>
+
+<h3>Virtual DOM</h3>
+
+<ul>
+<li>One way to do this</li>
+<li>Whenever anything may have changed, re-render everything</li>
+<li>Diff the previous representation with the next one</li>
+<li>Only hit the dom with minimal changes</li>
+</ul>
+
+<h3>Static Analyzing</h3>
+
+<ul>
+<li>Data binding systems are not statically analyzable. They can&rsquo;t lint, type check, minify, etc.</li>
+<li>Vanilla JS is.</li>
+</ul>
+
+<h3>Mobile</h3>
+
+<ul>
+<li>Memory is just as important as CPU. The OS will kill your app if it grows too large in memory</li>
+<li>KVO bookeeping costs CPU and memory</li>
+<li>With a virtual DOM approach, render code is usually very cheap. Few, if any tight loops.</li>
+<li>Your view is usually smaller than your model, and if it&rsquo;s not you don&rsquo;t typically have performance problems.</li>
+</ul>
+
+<h3>Performance Benchmarks</h3>
+
+<p><code>O(v)</code> vs. <code>O(m)</code> — model size vs view size
+<code>v</code> is much less than <code>m</code> in most real world apps. On a single update, KVO CPU is <code>O(n)</code> where n is the number of operations. Virtual DOM is <code>O(v)</code>.</p>
+
+<h3>Solving Performance Problems</h3>
+
+<p>KVO? Don&rsquo;t use data binding, do it manually.
+Virtual DOM? Caching.
+This is where shouldUpdate comes in — it allows you to use the already rendered (essentially cached) result instead of re-rendering.</p>
+
+<h3>Simplicity</h3>
+
+<blockquote>
+<p>If you&rsquo;re going to keep using the performance argument, eventually you&rsquo;re going to lose.</p>
+</blockquote>
+
+<ul>
+<li>Performance isn&rsquo;t the Virtual DOM&rsquo;s primary argument, simplicity is.</li>
+<li>It is the most expressive way to write your UI.</li>
+<li>To use something like Firebase in a KVO templated view, you have to create bindings that work with the template language. Not so with a Virtual DOM system - just use it.</li>
+</ul>
+
+<p><a name="8"></a></p>
+
+<h2>Terra.js — a Semantic Terrain engine</h2>
+
+<p><em><a href="https://github.com/felixpalmer">Felix Palmer</a></em></p>
+
+<h3>What?</h3>
+
+<p>Semantic terrain WebGL rendering engine.</p>
+
+<h3>Why?</h3>
+
+<p>Originally motivated by visualizing train stations in Czech Republic. But actually for fun.</p>
+
+<h3>How?</h3>
+
+<ul>
+<li>Data sources
+
+<ul>
+<li>Aeral photography</li>
+<li>Elevation data</li>
+<li>Land cover data</li>
+</ul></li>
+<li>Tile loading</li>
+<li>Terrain generation for CPU
+
+<ul>
+<li>Primitive geometry in JS and passed to GPU.</li>
+<li>Vertex shader reads in elevation data and displaces vertices.</li>
+<li>Complication: level of detail.</li>
+</ul></li>
+<li>Rendering
+
+<ul>
+<li>Deformed terrain -&gt; fragment shader.</li>
+<li>GPU decides how to render based on land cover data.</li>
+</ul></li>
+</ul>
+
+    </article>
+  </body>
+</html>
