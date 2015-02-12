@@ -1,0 +1,484 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>microxchg 2015 Notes. Day 1</title>
+
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/code.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+
+  <body class="microxchg2015 microxchg2015_day1">
+    <article>
+      <h1>microxchg 2015: The Microservices Conference in Berlin</h1>
+
+<p><em>Berlin, Feb 12-13th, 2015</em></p>
+
+<p><a name="1"></a></p>
+
+<h2>Domain Service Aggregators: a Structured Approach to Microservices Composition</h2>
+
+<p><em><a href="https://twitter.com/caolite_oconnor">Caolite O&#39;Connor</a> — developer at ITV (British television company)</em></p>
+
+<h3>Split into a set of bounded contexts</h3>
+<pre class="highlight plaintext">     ----&gt; Domain (e.g. catalogue) -    +-------+
+    /                               \   |       |
+App -----&gt; Domain --------------------&gt; | Cache | -&gt; User
+    \                               /   |       |
+     ----&gt; Domain ------------------    +-------+
+</pre>
+
+<ol>
+<li>Organisationla boundaries work best.</li>
+<li>High cohesion, loose coupling.</li>
+<li>Think resource oriented.</li>
+</ol>
+
+<p>Each domain is represented by a REST service:</p>
+
+<ul>
+<li>Extract domain into a microservice and put it in front of the legacy system.</li>
+<li>Varnish cache to &ldquo;protect&rdquo; the microservice.</li>
+</ul>
+
+<p><em>! LATER: The Netflix API gateway pattern.</em></p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+<li>Bounded contexts</li>
+<li>Resource-oriented</li>
+<li>&hellip;</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+<li>Ignored underlying data sources.</li>
+<li>API Gateway can become a monolith.</li>
+</ul>
+
+<h3>Simplifying the API Gateway</h3>
+
+<ul>
+<li>Batch queries are hard to cache.</li>
+<li>Use of HTTP queries to simulate database inner joins.</li>
+</ul>
+
+<p><strong>Introduce aggregation service:</strong></p>
+
+<ul>
+<li>Client specific integration separated.</li>
+<li>New VOD (Video-on-demand) service gets datastore.</li>
+<li>Less HTTP calls</li>
+<li>&hellip;</li>
+<li>&hellip;</li>
+</ul>
+
+<p><strong>Domain service</strong></p>
+
+<ul>
+<li>Like a single DB table.</li>
+<li>Consistent.</li>
+<li>Modified by Human Commands.</li>
+<li>Long lived datastore.</li>
+</ul>
+
+<p><strong>Aggregation service</strong></p>
+
+<ul>
+<li>Like a DB projected view.</li>
+<li>Eventually consistent.</li>
+<li>Modified by Domain Update Events.</li>
+<li>Ephemeral datastore.</li>
+</ul>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+<li>Client integration separated from Service aggregation</li>
+<li>Inner Join&quot; HTTP calls eliminated</li>
+<li>Query logic to specialist datastore</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+<li>High coupling between domains and aggregation service</li>
+</ul>
+
+<h3>The Right Way™</h3>
+
+<p><strong>HATEOAS</strong> — <a href="http://en.wikipedia.org/wiki/HATEOAS">Hypermedia as the Engine of Application State</a>.</p>
+
+<p>Add an availability service (presenter).</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+<li>Identified a new and highly cohensive domain.</li>
+<li>Decoupled domain services from domain aggregator.</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+<li>Some duplicated logic back into API Gateways.</li>
+<li>A challenge for Consumer Contract Testing.</li>
+</ul>
+
+<h3>Versioning</h3>
+
+<p><strong>Pitfalls:</strong></p>
+
+<ul>
+<li><code>/catalogue/v1/episodes/123456</code> — no permanent location.</li>
+<li>Any breaking change in the API needs to be reflected in URLs.</li>
+<li>Domains coupling is back: this time with hardcoded URLs.</li>
+</ul>
+
+<p><strong>Solutions:</strong></p>
+
+<ul>
+<li>Don&rsquo;t version your APIs</li>
+<li>Version the host</li>
+<li>Require custom version header</li>
+<li>Require a version request parameter</li>
+<li>Require a version in the accept header media type</li>
+</ul>
+<pre class="highlight plaintext">  HTTP GET:
+
+  https://api.example.com/some/resource
+  Accept: application/vnd.my+awesome+type+hal+json;version=1
+</pre>
+
+<h4>Content negotiation</h4>
+
+<ol>
+<li>Web browser makes a standard request.</li>
+</ol>
+<pre class="highlight plaintext">  HTTP GET:
+
+  https://api.example.com/some/resource
+  Accept: text/html
+</pre>
+
+<ol>
+<li>Respond with the content of type, provided in <code>Accept</code> header.</li>
+</ol>
+<pre class="highlight html">  Context-Type: text/html;encoding=utf-8
+
+  <span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+      <span class="nt">&lt;h1&gt;</span>Resource<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+  <span class="nt">&lt;/html&gt;</span>
+</pre>
+
+<p><a name="2"></a></p>
+
+<h2>Measuring Microservices</h2>
+
+<p><em><a href="https://twitter.com/rjrodger">Richard Rodger</a></em> — CTO of nearForm.com</p>
+
+<h3>Message flow rate</h3>
+
+<ul>
+<li>Easy to measure.</li>
+<li>Tells you a lot:
+
+<ul>
+<li>Perfomance degradation because of changes in services</li>
+</ul></li>
+<li>Independent of services.</li>
+</ul>
+
+<h4>What to measure?</h4>
+
+<p><strong>Services patterns:</strong></p>
+
+<ul>
+<li>Actor — a pool of services share message load evenly.</li>
+<li>Subscriber — many services, all listen for the same set of message types.</li>
+<li>Chain — an initial message causes a chain of serial message steps.</li>
+<li>Tree — an initial message causes a flowering of child mesages.</li>
+</ul>
+
+<p>Dynamic measurement — measure health of the system. Exposes unknown unknowns.</p>
+
+<p><em>! LATER: <a href="http://research.microsoft.com/en-us/um/people/lamport/tla/tla.html"><strong>TLA+</strong> (Leslie Lamport)</a></em></p>
+
+<p>Define and measure invariants — non-changing metrics.</p>
+
+<blockquote>
+<p>Example:
+ E-commerce shopping cart:
+ add-to msg == sales tax msg</p>
+</blockquote>
+
+<p>Example invariants for different patterns:</p>
+
+<ul>
+<li>Actor: n actors means each actor sees 1/n of the messages</li>
+<li>Subscriber: n subscribes n messages</li>
+<li>Chain: n over k means n*k</li>
+<li>Tree: n msg over k leaves n*k leaf messages</li>
+</ul>
+
+<p>Invariant has changed after deployment → rollback.</p>
+
+<ul>
+<li>Business rules are invariants too! Express them as message relationships.</li>
+<li>Combine individual indicators to get a deeper measure of risk.</li>
+</ul>
+
+<p><a name="3"></a></p>
+
+<h2>Building Event-Driven Microservices with Docker and Spring Boot</h2>
+
+<p><em><a href="https://twitter.com/crichardson">Chris Richardson</a> — Author of POJOs in Action, Founder of the original Cloud Foundry PaaS, Java Champion, JavaOne Rock Star</em></p>
+
+<p><strong><a href="http://www.slideshare.net/chris.e.richardson/building-and-deploying-microservices-with-event-sourcing-cqrs-and-docker-melbourne-microservices-meetup-2015">Slides</a></strong></p>
+
+<h3>Why build event-driven microservices?</h3>
+
+<p>Traditional application architecture: browser/client-presenter+services-RDBMS, packed and deployed all at once.</p>
+
+<ul>
+<li><strong>Simple</strong> to develop, test and deploy.</li>
+<li><strong>Hard</strong> to do continuous delivery, scale and maintain.</li>
+</ul>
+
+<p>Scaling cube:</p>
+
+<ul>
+<li>X — horizontal duplication</li>
+<li>Y — functional composition</li>
+<li>Z — data partitioning</li>
+</ul>
+
+<p>Single RDBMS system limitations:</p>
+
+<ul>
+<li>Scalability</li>
+<li>Distribution</li>
+<li>Schema updates</li>
+<li>O/R impedance mismatch</li>
+<li>Handling semi-structured data</li>
+</ul>
+
+<p>Solutions?</p>
+
+<ol>
+<li>Sharding</li>
+<li>Use NoSQL</li>
+</ol>
+
+<p>Multiple RDBMS — how to keep them in sync?</p>
+
+<h3>Event-based architecture approach</h3>
+
+<ul>
+<li>Components (services) publish event when state changes.</li>
+<li>Components subscribe to services:
+
+<ul>
+<li>Maintaing eventual consistency across several aggregates.</li>
+<li>Synchronize replicated data.</li>
+</ul></li>
+</ul>
+
+<p>To mainpain consistency service must <strong>atomically</strong> publish an event <strong>whenever</strong> the domain object changes.</p>
+
+<ul>
+<li>Use 2PC</li>
+<li>Use datastore as a message queue
+
+<ul>
+<li>new event: insert event into database</li>
+<li>consume event: mark as processed</li>
+</ul></li>
+</ul>
+
+<h3>Event sourcing</h3>
+
+<ul>
+<li>Identify domain events</li>
+<li>Define event classes</li>
+</ul>
+
+<p>Persist the sequence of events that lead to the state, not the state itself,
+and replay them later. No need of of atomic update+publish.</p>
+
+<h3>Business benefits of event-driven approach</h3>
+
+<ul>
+<li>Built-in reliadble audit log</li>
+<li>Enables temporal queries</li>
+<li>Publishes event needed by big data/prefdictive analysis etc.</li>
+<li>Preserved history</li>
+</ul>
+
+<h3>Technical benefits and drawbacks</h3>
+
+<ul>
+<li>Solves data consistency
+
+<ul>
+<li>Atomic save and publish events</li>
+<li>Event subscribers update other aggregates ensuring eventual consis</li>
+<li>Event subscribers update materialized views in SQL and NoSQL databases</li>
+</ul></li>
+<li><p>Eliminates O/R mapping problem</p></li>
+<li><p>Weird and unfamiliar</p></li>
+<li><p>Events = a historical record of your bad design decisions</p></li>
+<li><p>Handling duplicates can be tricky</p></li>
+<li><p>Application must handle eventually consistent data</p></li>
+</ul>
+
+<h3>Implementing queries in an event sourced application</h3>
+
+<p><strong>CQRS</strong> pattern — <strong>C</strong>ommand <strong>Q</strong>uery <strong>R</strong>esponsibility <strong>S</strong>eparation.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+<li>NEcessary in an event-sourcet architecture</li>
+<li>Separation of concerns</li>
+<li>Supports multiple denormalized views</li>
+<li>Improved scalability and perfomance</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+<li>Complexity</li>
+<li>Potential code duplication</li>
+<li>Replication lag / eventually consistent views</li>
+</ul>
+
+<h3>Builing and deploying microservices</h3>
+
+<ul>
+<li>Node.JS for API</li>
+<li>Scala / Spring Boot for heavy lifting</li>
+<li>S3 as a storage</li>
+<li>AWS Cloud for indexing</li>
+</ul>
+
+<h4>Jenkins-based deployment pipeline</h4>
+
+<ol>
+<li>Build &amp; test</li>
+<li>Build &amp; test docker image
+
+<ul>
+<li>deploy container</li>
+<li>check e.g. /health</li>
+</ul></li>
+<li>Deploy docker image to registry</li>
+</ol>
+
+<p><a name="4"></a></p>
+
+<h2>Microservices, Micro Operations? - Challenges of Microservice Models at the Operations Level</h2>
+
+<p><em><a href="https://twitter.com/dhpts">Dustin Huptas</a> &amp; <a href="https://twitter.com/aschmidt75">Andreas Schmidt</a></em></p>
+
+<p>Evolution of infrastructure over last years:</p>
+<pre class="highlight plaintext">Physical servers → virtual servers → containers → dynamic workloads
+</pre>
+
+<p><strong>Dev:</strong></p>
+
+<ul>
+<li>Local development/test environment</li>
+<li>Single host</li>
+<li>Mocked services</li>
+</ul>
+
+<p><strong>Prod:</strong></p>
+
+<ul>
+<li>Scaling of instances</li>
+<li>Services instances scattered</li>
+<li>Networking, security, i.e. firewalling</li>
+<li>Logging and monitoring on a larger scale</li>
+<li>Stuff needs to be persisted</li>
+</ul>
+
+<h3>Increasing number of services</h3>
+
+<p>The number of services is tend to increase over time.</p>
+
+<p>Problem: maintaining a bag of services. How to call? How to scale? Deployments? Logging?</p>
+
+<p>Solution: detect patterns and apply them across all services.</p>
+
+<h3>Discovering of services</h3>
+
+<p>Few services — easy, just write down IP addresses.</p>
+
+<p>Scalability &amp; failover:</p>
+
+<ol>
+<li>In-app configuration</li>
+<li>Balancing layer within the service</li>
+<li>Wiring built into proxy/load balancer.</li>
+</ol>
+
+<p>Versioning (different versions of the same service exists simultaneously) and reachability (different network segments, etc.) are problematic.</p>
+
+<p>Proxy/LB with a built-in wiring tends to grow and uglify the configuration management layer.</p>
+
+<p><strong>KV cluster:</strong> — to keep mappings</p>
+
+<ul>
+<li>coreos/etcd</li>
+<li>consul</li>
+<li>…</li>
+</ul>
+
+<p><strong>Template engine</strong> — for configuration templates</p>
+
+<ul>
+<li>confd</li>
+<li>consul-template</li>
+<li>…</li>
+</ul>
+
+<p><strong>Proxying</strong> — you guess</p>
+
+<ul>
+<li>haproxy</li>
+<li>…</li>
+</ul>
+<pre class="highlight plaintext">discovery = proxying(template(values))
+</pre>
+
+<h3>Dependencies</h3>
+
+<ul>
+<li>Build: internal dependencies</li>
+<li>Runtime: infrastructure dependencies
+Problem: startup order.</li>
+</ul>
+
+<p>Resilience → <strong>circuit breaker pattern</strong></p>
+
+<p><del>Upfront design</del> → Changing architecture in-between</p>
+
+<ul>
+<li>Full automation is the key</li>
+<li>Configuration management tools for servers</li>
+<li>No more static wiring</li>
+</ul>
+
+    </article>
+  </body>
+</html>
