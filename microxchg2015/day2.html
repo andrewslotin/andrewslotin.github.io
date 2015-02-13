@@ -27,7 +27,9 @@
 
 <h2>{Nano|Micro|Mini}-Services? Modularization for Sustainable Systems</h2>
 
-<p><em><a href="https://twitter.com/stilkov">Stefan Tilkov</a></em></p>
+<p><em><a href="https://twitter.com/stilkov">Stefan Tilkov</a></em> — Co-founder and principal consultant at innoQ</p>
+
+<p><strong><a href="https://www.innoq.com/en/talks/2014/08/talk-modularization-for-sustainable-systems-munich/">Slides</a></strong></p>
 
 <h3>Reviewing architectures</h3>
 
@@ -52,13 +54,15 @@
 <p>Organization → Architecture</p>
 
 <blockquote>
-<p>&hellip;</p>
+<p>Organizations which design systems are constrained to produce systems which are copies of the communication structures of these organizations</p>
+
+<p><em>M.E. Conway</em></p>
 </blockquote>
 
 <p>Organization ← Architecture</p>
 
 <blockquote>
-<p>Choosing an architecture can be a mean of optimizing for a desired organizational structure.</p>
+<p>Choosing a particular architecture can be a means of optimizing for a desired organizational structure.</p>
 </blockquote>
 
 <h3>System bounaries</h3>
@@ -96,7 +100,9 @@ Macro architecture — a decision on how do the domain systems interact with eac
 <ul>
 <li>Separate, runnable processes</li>
 <li>Accessible via standard ports &amp; protocols</li>
-<li>&hellip;</li>
+<li>Shared-nothing model</li>
+<li>Horizontal scaling</li>
+<li>Fast startup &amp; recovery</li>
 </ul>
 
 <h3>Microservice Characteristics</h3>
@@ -214,7 +220,7 @@ Macro architecture — a decision on how do the domain systems interact with eac
 
 <h2>State of the Art in Microservices</h2>
 
-<p><em><a href="https://twitter.com/adrianco">Adrian Cockcroft</a></em> — cloud architect at Netflix</p>
+<p><em><a href="https://twitter.com/adrianco">Adrian Cockcroft</a></em> — cloud architect at Netflix 2010—2013</p>
 
 <p><strong><a href="http://www.slideshare.net/adriancockcroft/dockercon-state-of-the-art-in-microservices">Slides</a></strong></p>
 
@@ -242,7 +248,7 @@ Organization build up slow, complex &ldquo;Scar tissue&rdquo; processes.</p>
 </ul>
 
 <h3>Breaking Down the SILOs</h3>
-<pre class="highlight plaintext">Prod. manager → Devs → DBA → QA → Sys. adm. → Netw. adm.
+<pre class="highlight plaintext">Prod. manager → Devs → DBA → QA → Sys. adm. → Net. adm. → SAN Adm.
 </pre>
 
 <p><strong>Build dev teams as micro-services too!</strong></p>
@@ -360,7 +366,7 @@ Organization build up slow, complex &ldquo;Scar tissue&rdquo; processes.</p>
 
 <h2>Principles of Microservices</h2>
 
-<p><em><a href="https://twitter.com/samnewman">Sam Newman</a></em></p>
+<p><em><a href="https://twitter.com/samnewman">Sam Newman</a></em> — Technologist at ThoughtWorks, author of the book &ldquo;Building Microservices&rdquo;.</p>
 
 <p><strong>Microservices</strong> — small <strong>autonomous</strong> services that <strong>work together</strong>.</p>
 
@@ -427,13 +433,11 @@ Service
 <h3>Isolate failure</h3>
 
 <p>Microservices are less reliable, so there <strong>will</strong> be failures.</p>
-<pre class="highlight plaintext">           Strangler app
-
-        /         |        \
-       /          |         \
-      /           |          \
-
-Legacy app   Legacy app   Legacy app
+<pre class="highlight plaintext">                 --&gt; Legacy app
+                /
+Strangler app &lt;----&gt; Legacy app
+                \
+                 --&gt; Legacy app
 </pre>
 
 <p>Having a thread pool in a strangler app can be exausted if the legacy app slows down for some reason.</p>
@@ -466,6 +470,64 @@ Legacy app   Legacy app   Legacy app
 <p><em>! READ <a href="http://buildingmicroservices.com">Building Microservices</a></em></p>
 
 <!-- Discount code: AUTHD -->
+
+<h2>From Homogeneous Monolith to Radically Heterogeneous Microservices: The Wunderlist 3 Story</h2>
+
+<p><em>Chad Fowler</em></p>
+
+<pre style="font-size:4px;line-height:4px;font-family:monospace;">
+=~======++?7I??+++++++++++++++++==~~=====+I7II7???++++++++++++++========+?I$7$77                ................................................................................                777$I?+========++++++++++++++???77I7I+=========+++++++++++++++++??I7?++======~==
+=~=~=====+?7I?++++++++++++++++++=~~=~~===+I7III???+++++++++++++++=======+?I77777                .............,..................................................................                7777I?+=======+++++++++++++++???III7I+===~~==~=+++++++++=++++++++?I7?+=====~~~==
+=~~~~====+?7I?++++++++==+++=++++=~~~~~~==+I7III???++++++++++++++========++?7777I                ................................................................................                7777I++========++++++++++++++???III7I+==~~~~~~=++++==++==++++++++?I7?+====~~~~==
+=~~~~===++?7I?+++++++=======++++=~~~~~~~==IIIII???++++++=+++++++========++?77777                ......................................,.........................................                7777?++========++++++++++++++???IIIII==~~~~~~~=++++=+=====+++++++?I7?++===~~~~==
+=~~~~~===+?7I?+++++++========?7I$IZON8~$7=?IIII??+++++++++++++++=========+?7777I                ............,................,.......,,.........................................                7777?++========+++++++++++++++??III7I=7$=8NOZI$I7?========+++++++?I7?+===~~~~~~=
+=~~~~~===++7??+++++=?$O8ZO8DIONNDNNND888NDD88$I?+++++++++=++++++=========+?77777                ..........,,,,.,,,.,.,........,.,..,...,,.......................................                7777?+=========++++++=+++++++++?I$88DDN888DNNNDNNOID8OZ8O$?=+++++??7?+===~~~~~==
+~~~~~~===++7??++++DNDNNNNNNDDDNNNNDNNNNDDDOO8DDNDO++++++===+++++=~~=~~===+?7777I                ......,,,,,,,,,,,,.,...,,,.,...,.,,:~,,,::......................................                7777?+===~~=~~=+++++===++++++ODNDD8OODDDNNNNDNNNNDDDNNNNNNDND++++??7++===~~~~~~=
+~~~~~~===++7??++ZDDDDDNNNNNDDNDDNDDDNNNNNNNDDDNNNNN8I+++==++++++=~~~~~===+?7777I                ,,,,.,,,,,,,,,,,,,,,,,,,,,,.....,.~:,:=~+~==,..,................................                7777?+===~~~~~=++++++==+++I8NNNNNNDDNNNNNNNDDDNDDDDDNNNNNDDDDNZ++??7++===~~~~~~=
+~~~~~~===++7?++ND8OODDNNNNNNDDDDDNNDDNNNNNNNNNNNNNNNDN7+===+++++=~~~~~~==+?77777                .,,,,,,,,,,,,,,,,,,,,,,,,,,..,.,..::,:,:::~:==:::,,.............................                7777?+==~~~~~~=+++++===+7NDNNNNNNNNNNNNNNNDDNNDDDDDNNNNNNDDOO8DN++?7++===~~~~~~=
+~~~~~~===++7?+NDNNNNNNNNNNNNDDDDDDNNNNNNNNNNNNNNNNNNNNNN====++++=~~~~~~~=+?7777I                ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,~,,,.,,,,=:~~~+:::,............................                7777?+==~~~~~~=++++====NNNNNNNNNNNNNNNNNNNNNNDDDDDDNNNNNNNNNNNNDN+?7?+===~~~~~~=
+~~~~~~~==++7?INNNNNNNNNNNNNNNNDNNDNNDNNNNDNNNNNNNNNNNNNN$+==++++=~~~~~~~==+7777I                ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,:~~::,::~~::::,==~:,,,:...........................                7777+==~~~~~~~=++++==+ZNNNNNNNNNNNNNNDNNNNDNNDNNNNNNNNNNNNNNNNNNNI?7?+==~~~~~~~~
+~~~~~~~===?I?DNNNNNNNNDDDDDDNNNNDDNDDO888888DD8DNNNNNNNNN===++++=~~~~~~~==?I777I                ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,~???IIII?+=:,,,:,,,.,.,.........................                777I?==~~~~~~~=++++===NNNNNNNNND8DD888888ODDDDDNNNNDDDDDDNNNNNNNND?I?===~~~~~~~~
+~~~~~~~===+78NNNNNNNDNDDDNNDDDDD88OO$?I7IIIII$$$I$ODNNNOO===+=++=~~~~~~~~=+7I77I                ,,,,,,,,,,,,,,,,,,,,,,,,,,,.,,:IIIIIIIIIIIIII?:,,,,,,:..........................                7II7+=~~~~~~~~=++=+===OONNNDO$I$$$IIIII7I?$OO888DDDDDNNDDNDNNNNNNN87+===~~~~~~~=
+~~~~~~====+ONNNNNDDDDDDNNNNDD8OZ$?+====+++?IIIIII?IIODZZ+===+====~:~:~~~~=+7777I                ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,~IIIIIIIIIIIIIII??+,,.,,,,,........................                7777+=~~~~:~~~====+===+ZZDOII?IIIIII??++====+?$ZO8DDDNNNDDDDDDNNNNNO+====~~~~~~=
+~~~~~~~~==?NNNNDNDDNNDDNDDDDD8Z$?++++++++??IIII7IIIIII++====+++==~~~:~~~~=+I7III                ,,,,,,,,,,,,,,,,,,,,,,,,,,::,IIIIIIIIIIIIIIII???+~,,,,,.,.......................                II77+=~~~~:~~~==+++====++IIIIIIIIIII??++++++++?$ZODDDDDNDNNNDDDNNNNN?==~~~~~~~~=
+~~~~~~~===NNNNDDDDDDNDDNDDD88OZ$?++++++????I7777777I77++=========~:~:~~~~=+7III7                ,,,,,,,,,,,,,,,,,,,,,,,,,,,=?IIIIIIIII?II?IIII??+=~::,:,,.......................                III7+=~~~~:~:~=========++77I7777777II???++++++?$ZO88DDDNDDNDDDDDDNNNN===~~~~~~~~
+~~~~~~~~=+NNNNNDDDDDDDDDDDD88OZZ7I+++??????III777777II?+=========~:::~~~~=+7IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,,:=?=~:~+?????=::~==???+==::,,,........................                III7+=~~~::::~=========+?II777777III??????+++I7ZZO88DDDDDDDDDDDDNNNNN+=~~~~~~~~~
+~~~~~~~~~=MNNNNDDDDDDDDDDDD88OOZZ7I?++????III7$7$$$$$$7==========~:::::~~=+IIIII                ,,,,,,,,,,,,,,,,,,,,,,,,,,,:?III=~:+I+,:~??+,,~++~=:,:,,,.......................                IIII==~~:::::~==========$$$$$$$7$7III????++?I7ZZOO88DDDDDDDDDDDDNNNNM=~~~~~~~~~~
+~~~~~~~~==MNNNNNNNNNNDDDDDD8888OO$I???????II7$ZZZZ$ZO8DD=========~:::::~~=+I7III                ,,,,,,,,,,,,,,,,,,,,,,,,,,,++:,:::~=I:~~,.,,~=,..+:=:::,,.......................                II7I+=~~:::::~=========DD8OZ$ZZZZ$7II???????I$O88888DDDDDDNNNNNNNNNNN==~~~~~~~~~
+~~~~~~~~==ONDNDNDNNDDDDDDDD888887I?II?III88DDDD88ZZODD8D=========~:::::~~=+IIIII                ,,,,,,,,,,,,,,,,,,,,,,,,,,.?:::~:=+7I=+::::,::.,,..~~::,........................                IIII+=~~:::::~=========D8DDOZZ88DNDD88III?II?I788888DDDDDDDNNNDNDDDNO==~~~~~~~~~
+~~~~~~~~~=INNNNNNNNDNDDDDD88888I???III$Z88OOO8DDO$$DDND8O8M======~::::~~~=+IIIII                ,,,,,,,,,,,,,,,,,,,,,,,,,,~+++II?+7III=I?+?+~:~~:~,.,::,........................                IIII+=~~~::::~======M8O8DNDD$$ODD8OOO88O$III???I88888DDDDDNDNNNNNNNNI=~~~~~~~~~~
+~~~~~~~~~=+NNNNNNDDDDDDDDDDDDDZI?I7$O8DDDDNNDDDZ$ONNND8+7ZN======~:::::~~==IIIII                ,,,,,,,,,,,,,,,,,,,,,,,,,,??III7I+~==??II+~~~I?++=+~:,,,........................                IIII==~~:::::~=====~NZ7+8DNNNO$ODDDNNDDD88O$7I?IZDDDDDDDDDDDDDNNNNNN+=~~~~~~~~~~
+~~~~~~~~~=+DNNNNNDD$??$NNNNNNNNNNNNNNNNDDNNDDDO$$DD?D8I=+=8======~::::~~~==?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,+III7III:,,:,~IIIIII??++++:=+=?........................                III?==~~~::::~======8=+=I88?DD$$ODDDNNDDNNNNNNNNNNNNNNNN$??$NDNNNNND+=~~~~~~~~~~
+~~~~~~~~~=+ODNNNDD7I88888ODD8O7??IODDDNDD8N888ZOZ8I??O==7O~======~::::~~~=+?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,=IIIIII+:,,:~I??III???+=++=:,,,........................                III?+=~~~::::~======~O7==O??I8ZOZ888N8DDNDDDOI??7O8DDO88888I7DDNNNDO+=~~~~~~~~~~
+~~~~~~~~~==$NNNNNN7OI?IOOZO8DZII?????IIZ8DNDD8DODI?+II$$==~=====~~:::::~~~=?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,=??III~~~+I~:~++??+=+++==~~,=~~,,,.....................                III?=~~~:::::~~=====~==7$II+?IDODDDDND8ZII?????IIZD8OZOOI?IO7NNNNNN$==~~~:~~~~~~
+~~~~:~~~~==IINNNNDZ$?ZO7$?IOZ7II???????IIIZ8DZ$87?+++?I7========~~:::::~~~=?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,:+??+:,,.,,,,,,:==~~=~~:::~???.........................                III?=~~~:::::~~========7I?+++?78$ZD8ZIII???????II7OOI?$7OZ?$ODNNNNII==~~~~~~~~~~
+~:~:~~~~~=+I?DDNNNDI?7I77??$$$7IIII??IIIIII777ZZ$I?$$7O$I=~~====~~:::::~~==?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,:~=?=:+II??II?=:===::::,::=+?..,.......................                III?==~~:::::~~====~~=I$O7$$?I$ZZ$7IIIIIII??IIII7$$$??$7I7?IDNNNND?I+=~~~~~:~:~~
+~::::~~~~~=I?+NNNDNII??++77ZZZZ$77IIIIIII?II7$ZZODDDDD8Z$=~~===~~~:::::~~~=?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,~~~+~=I?~:~~=+?:=~:,:::,:,=+...........................                III?=~~~:::::~~~=~=~~=$Z8DDDDDOZZ$7II??IIIIIII7$ZZZZ77++??IINNNNN+?I=~~~~~::::~~
+~:::::~~~~=I?+ONNNNN$?++++IOOO8OZZZ$7IIIIII77$Z$7$ODNNN8O7=~=~~~~~::::~~~~=?IIII                ,,,,,,,,,,,,,,,,,,,,,,,,,::~:~+I?+I++?I+~::,,::,,,,,,...........................                III+=~~~~::::~~~~~=~=7OODNNDO$I$Z$77IIIIII7$$ZZO8OOOI++++?$NNNNNO++I=~~~~:::::~~
+~::::::~~~=I?++7NNNND$?+??I88OOOOOOOZ$$7$$$$ZZZZONDDNNNNOO~~~~~~~~::::~~~~=?I?II                ,,,,,,,,,,,,,,,,,,,,,,,~~~~~::~=~~~:~+=::::,,::,,,,,...,,,......................                III?=~~~~::::~~~~~~~~OONNNNDDNOZZZZ$$$$$$$ZOOOOOOOO8I??+?$DNNNN7++?I=~~~::::::~~
+~:::::::~~=I++++7NNNDZ$$$Z788888O888OOOZZOOZOOODDDDNDNNDDO~~~~~~~~::::~~~~=?I??I                ,,,,,,,,,,,,,,,,,,,,,,?I7,~~~~:~,,:::~,,,,,,,:,,,,.,,..,.,......................                ??I?=~~~~::::~~~~~~~~8DDNNDNDDDDOOOZOOZZOOO888O888887Z$7$ZDNNN7++++I=~~:::::::~~
+::::::::~~=I+++=+NDN8Z$$ZZ$88888888DD88OO8OOO8DDDD8OOODNN+~~~~~~~~:::::~~~=+I??I                .,,,,,,,,,,,,,,,,,,,,.,.,,,=~::,,,,,,,.,,,,,::::::.,.,,,.,......................                ??I+=~~~~::::~~~~~~~~+NNDOOO8DDDD8OOO8OO88DD88888888$ZZ$$Z8NDN+=+++I=~~::::::::~
+::::::::~~=I+++==+DD8$I77$8D8888D8DDD8888D888DND888DDDDDO~~~~~~~~~:~:::~~~=+I?I?                ,,,,,,,,,,,,,,,,,,,,,,,,,,,+==~,,,,,,,,,,,,::::~~,,,,...,.......................                ??I+=~~~:::~:~~~~~~~~~ODDDDD888DDD88DD8888DDD8D8888D8$77I$8DD+==+++I=~~::::::::~
+::::::::~~=7?++===+8O7I??78888888DDDDD88DDDDDDD8$$ZO8DDD$=~~~~~~~~::~~~~~~=+I???                ,,,,,,,,,,,,,,,,,,,,,,,,,,?++===~~:::::::::::~~~~..,,...,.......................                ??I+=~~~~~~::~~~~~~~~=$DDD8OZ$$ODDDDDDD88DDDDDD8888887??I7O8+===++?I=~~::::::::~
+::::::::~~=I?++====+ZI??I7OOO88888DD8DDDNNNDDDDOZ$$Z8DDDZ=~~~~~~~~::::~~~~=+I???                ..,,,,,,,,,,,,,,,,,,,,,,,:?++===~~~~~~:::::::~~~=..,..,.........................                ??I+=~~~~::::~~~~~~~~=ZDDD8Z$$ZODDDDNNNDDD8DD8888OOOO7I??7Z+====++?I=~~::::::::~
+:::::::::~=I?++=====7II?I7888888D88D8DDDNNNNDNNDOOOO8DDDD+~~~~~~~~::::~~~~=+I??I                ..,,,,,,,,,,,,,,,,,,,,,,,II?I=~~~~::~~:::::::~~~~+,,............................                ??I+=~~~:::::~~~~~~~~+8DDD8OOOODNNDNNNNDDD8D88D8888887I?II7=====++?I=~:::::::::~
+:::::::::~=?+++====?????II$Z888888888DNDNNNNNNNDD8D8DNND8?~~~~~~~~:::::~~~=+I???                ...,,,,,,,,,,.,,,.,,,:~II?I=?II:,:::~::::::~~~===+:,,,,.........................                ??I+=~~~:::::~~~~~~~~?8DNND8D8DDNNNNNNNNND888888888Z$II?????====+++?=~~::::::::~
+::::::::~~=I?++====?+????I7$ZO8888888DDDNNNNNNNNDDDDDDDDO+~~~~~~~~::::~~~~=+I???                ...,.,,,,,,,,,:~?I7II7IIII?=+I=,=:::::::::~====++I?.,.,,,,......................                ??I+=~~~~::::~~~~~~~~+ODDDDDDDNNNNNNNNNDDD8888888OZ$7I????+?====++?I=~~:::::::::
+:::::::::~=I?+==~~=I+????I77$ZZO888888DDDNNNNNNNNDDDDDNDZ=~~~~~~~~:::::~~~=+7I??                .,,,,,,,,+7IIIIIII?I?777I?I~++,.?::,::::~~=+=?I~?+?,,.,.,,,.....................                ?I7+=~~~:::::~~~~~~~~=ZDDDDDDDNNNNNNNNDDDD88888OZZ$7II????+I=~~==+?I=~::::::::::
+:::::::::~~??+=::=?ZZ????II77$ZOOO8888DDDNNNNNNNNDDDDDD8?=~~~~~~~~:::::~~~=+II??                =I7I7IIIII?7III+I??77IIIII=I??,,:=+,::~=:~:,.~~~=++=++.,........................                ?II+=~~~:::::~~~~~~~~=?8DDDDDDNNNNNNNNDDD8888OOOZ$$7II????ZZ?=::=+??~~::::::::::
+:::::::::~~+,,::~~7IOO????III7$ZZOO8O8DDDNNNNNNNNNND888O$=~~~~~~~~:::::~~~==II??                ?7III?I7I?I?7I77I77I77I7I+II+?~,~?I?I=,:,,,,~~:+?+=+=I?I,...,...................                ?II+=~~~:::::~~~~~~~~=$O888DNNNNNNNNNNDD88O8OOZZ$77II????OOI7~~::,,+~~::::::::::
+:::::::::,,,,:~~==O7IOZ???III77$ZZZOOO88DDDNDNNNNNDDDDOO==~~~~~~~~:::::~~~=+II??                I?I+??=7??7=IIII?I7I=I??I+?III=~?:,,?++,,,,::~~?=??==II+?7=.,...................                ?I?+=~~~:::::~~~~~~~~==OODDDDNNNNNDNDDD88OOOZZZ$77III???ZOI7O==~~:,,,,::::::::::
+:::,,,,,,,,,::~===+O7IOZ????I7$$ZZOOOO888DDDD7NDNDDND8O$+=~~~~~~~~:::::~~~=+I???                ?+II+I+?II7I?7?IIII7+?I=7??II+?II=?=7?~II=,+I~~++I?I??I?=I=II~..,.,.............                ??I+=~~~:::::~~~~~~~~=+$O8DNDDNDN7DDDD888OOOOZZ$$7I????ZOI7O+===~::,,,,,,,,,::::
+:,,,,,,,,::::~~~==+?Z7?Z7??II77$ZZOO888888888$$88DDD8ZZ$+=~~~~~~~~::::::~~=+????                =?II=I??I7II777II7I7I+7III?IIII==III??===?=I?+?I+??I+II+II+IIIII?~...,..........                ???+=~~::::::~~~~~~~~=+$ZZ8DDD88$$888888888OOZZ$77II??7O?7Z?+==~~~:::::,,,,,,,::
+,,,,,,:~~~~~~~~~====IO7IZ$??II77$$OO8DDD88OO8$$$7IZO8$7I==~~~~~~~~::::::~~=+?I??                ++II~I7I?7I7III7IIIII+7III+II?7????I~I?II??=IIII?++I=II=II?II=??+II?:.,.........                ?I?+=~~::::::~~~~~~~~==I7$8OZI7$$$8OO88DDD8OO$$77II??$ZI7OI====~~~~~~~~~:,,,,,,,
+,,,,,:~~~~~~~~~====+=+OI?OZ????II7$$ZZZ$ZZ$$$Z7I7II?+?~~~~~~~~~~~~::::::~~=+????                +I7I+II7=II?77?7II7?I?I7I7?I?+7I?II=?II+I~I??I?II??I~?I++I???I7I=I~?I+II,,......                ???+=~~::::::~~~~~~~~~~~~?+?II7I7Z$$$ZZ$ZZZ$$77I????ZO?IO+=+====~~~~~~~~~:,,,,,,
+::::::~===~========++++Z$IZZ??????II7$ZZOOOZ8OO?+?+++~~:::,:~~~~~~::::::~~=+????                =?I?IIII??7I?IIIII7?I7IIIII?7=II=II?=?II7+I7=I?+?I?I=+I?=7+?I~II?I?I?+I?II+,,...                ???+=~~::::::~~~~~~:,::::~+++?+?OO8ZZOOZ$$III??????ZZI$Z++++========~===~:::::::
+~~===~~=======+===+++++=Z7IZZ????????????I77OOO??+I+=+~~~=~~::::~:::::::~~=+????                I?++III?IIII+IIIIII+III7??I=I+?I~I~I??7?I?+I~I?~IIII=+I?=I=+I~???I+II=???=?I,...                ???+=~~:::::::~::::~~=~=~==+I+??OOO77I????????????ZZI7Z=+++++===+=======~~===~~~
+~=====~~+=====++++=++++=+OI?Z$?++++?+?+?????Z8O$???I??????I+?+~,,,::::::~~==?I??                ?I=+IIIIII?I+II?7IIIII7II?I=I??I~I~II?7III+I=II=?I?I??I++7+??+?III?II++?+~I??7,.                ?I?==~~::::::,,,~+??I??????I??I$O8Z?????+?+?+++++$ZIIO+++++++++++=====+~~=====~~
+==+++===++++++++++++++++++Z77Z$+++++++++++++IOO8I??7I??I?IIII?++=:,,:::::~=+?I??                ~~I?7IIIII+IIIIIII?7I7III+I~?I+I+I+?I?IIII?I=?I++I+II?I=II?II=?I?II?I===I+++I+,.                ?I?+=~:::::,,:=++?IIII?I??I7??I8OOI++++++++++=++$Z77Z++++++++++++++++++====++==+
+==+++=~~+++=++++==+++++++++Z7ZZ7++==+=+=====+OZO???7I???IIIIIII==++::::::~==????                I=II7?IIII=II+I?II?7III+I~?+?I?II7IIII7?+I~???I++I?II+I=II?I?+?I?I??I?+?I??++=,.                ???==~::::::++==IIIII?I???I7???OZO+=====+=+==++7ZZ7Z+++++++++==+++==+++~~=+++===
+</pre>
 
     </article>
   </body>
