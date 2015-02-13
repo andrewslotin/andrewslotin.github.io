@@ -1,0 +1,472 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>microxchg 2015 Notes. Day 2</title>
+
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/code.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+
+  <body class="microxchg2015 microxchg2015_day2">
+    <article>
+      <h1>microxchg 2015: The Microservices Conference in Berlin</h1>
+
+<p><em>Berlin, Feb 12-13th, 2015</em></p>
+
+<p><a name="1"></a></p>
+
+<h2><del>Microservices for Speed</del></h2>
+
+<p><del><em>Russell Miles</em></del></p>
+
+<h2>{Nano|Micro|Mini}-Services? Modularization for Sustainable Systems</h2>
+
+<p><em><a href="https://twitter.com/stilkov">Stefan Tilkov</a></em></p>
+
+<h3>Reviewing architectures</h3>
+
+<p><strong>Problems:</strong></p>
+
+<ul>
+<li>Building features takes too long.</li>
+<li>Technical debt is well-known and not addressed.</li>
+<li>Deployment us way too complicated and slow.</li>
+<li>Architectural quality has degraded.</li>
+<li>Scalability has reached its limit.</li>
+<li>&ldquo;-ility&rdquo; problems abound (maintainability, scalability, etc.)</li>
+<li>Replacement would be way too expensive.</li>
+</ul>
+
+<p><strong>Solution:</strong></p>
+
+<p>The best strategy is not to get there :-D</p>
+
+<h4>Conways&rsquo;s Law</h4>
+
+<p>Organization → Architecture</p>
+
+<blockquote>
+<p>&hellip;</p>
+</blockquote>
+
+<p>Organization ← Architecture</p>
+
+<blockquote>
+<p>Choosing an architecture can be a mean of optimizing for a desired organizational structure.</p>
+</blockquote>
+
+<h3>System bounaries</h3>
+
+<p>Systems are build because of external reasons. Consolidation of two legacy systems is hard.
+Context is set by a project bound.</p>
+
+<p>Common approach: 1 project = 1 system? Modularization ends up with splitting into smaller systems.</p>
+<pre class="highlight plaintext">single file → few files → library, class hierarchy → framework + application → multiple applications
+</pre>
+
+<h3>System Characteristics</h3>
+
+<ul>
+<li>Separate persistence</li>
+<li>Internal, separate logic</li>
+<li>Domain models &amp; implementation strategies</li>
+<li>Separate UI</li>
+<li>Separate development &amp; evolution</li>
+<li>Limited interaction with other systems</li>
+<li>Autonomous deployment and operations</li>
+</ul>
+
+<p>We don&rsquo;t do all of that, rather just accepting that the context already exists!</p>
+
+<p>Domain decision — decoupling the problem.
+Macro architecture — a decision on how do the domain systems interact with each other</p>
+
+<p>Instead of designing UI + logic + persistense think of systems, each of which has its own UI+logic+persistence layers.</p>
+
+<p><a href="http://12factor.net">The Twelve-Factor App</a></p>
+
+<h3>App Characteristics</h3>
+
+<ul>
+<li>Separate, runnable processes</li>
+<li>Accessible via standard ports &amp; protocols</li>
+<li>&hellip;</li>
+</ul>
+
+<h3>Microservice Characteristics</h3>
+
+<ul>
+<li>Small</li>
+<li>Lightweight communicating mechaisms</li>
+<li>Built around business capabilities</li>
+<li>Independently deployable</li>
+<li>Minimum of centralized management</li>
+</ul>
+
+<p>Quite similar to system characteristics.</p>
+
+<h3>Self-containing System Characteristics</h3>
+
+<ul>
+<li>Autonomous web app</li>
+<li>Owned by one team</li>
+<li>No sync remote calls</li>
+<li>Service API (optional)</li>
+<li>Includes data and logic</li>
+<li>No shared UI</li>
+<li>No pull-based code sharing only</li>
+</ul>
+
+<table><thead>
+<tr>
+<th></th>
+<th>SCS</th>
+<th>App</th>
+<th>Microservice</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Size (kLoC)</td>
+<td>1-50</td>
+<td>0.5-10</td>
+<td>0.1-?</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Self-contained</td>
+<td>External</td>
+<td>Self-contained</td>
+</tr>
+<tr>
+<td># per logical system</td>
+<td>5-25</td>
+<td>&gt;50</td>
+<td>&gt;100</td>
+</tr>
+<tr>
+<td>Communication between units</td>
+<td>No (if possible)</td>
+<td>?</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>UI</td>
+<td>Included</td>
+<td>Included</td>
+<td>External (?)</td>
+</tr>
+</tbody></table>
+
+<h3>But Why?</h3>
+
+<ul>
+<li>Isolation!</li>
+<li>(Independent) Scalability — scale only the part that needs to be scaled</li>
+<li>Localized descisions — once taken the decision should not applied system-wide</li>
+<li>Replaceability</li>
+</ul>
+
+<h3>Necessary Rules &amp; Guidelines</h3>
+
+<ul>
+<li>Cross-system: macro decisions, e.g. logging, BI interfaces, protocols, etc.</li>
+<li>Single System: patterns, programming language, technologies, etc.</li>
+</ul>
+
+<h3>Client-side integration</h3>
+
+<ul>
+<li>Thin client sucks because it&rsquo;s hard to maintain and it&rsquo;s slow.</li>
+<li>Fat client sucks because of Javascript hell.</li>
+<li>Links FTW! Each service has it&rsquo;s own interface.</li>
+</ul>
+
+<h3>Server-side integration options</h3>
+
+<ul>
+<li>Deployment (VCS, Gems, Maven artifacts)</li>
+<li>Development (Chef Puppet Build tools Asset Pipeline)</li>
+<li>Storage (DB replication, Feeds)</li>
+<li>Backend call (RMI, RPC)</li>
+<li><p>Edge (ESI, Portal server)</p></li>
+<li><p>Linking (cheap &amp; self-contained)</p></li>
+<li><p>Replaceable link (unobtrusive JS, oEmbed, ROCA-style)</p></li>
+<li><p>Client call (SPA-style, JS Widgets)</p></li>
+</ul>
+
+<h3>Summary</h3>
+
+<ul>
+<li>Explicitly design system boundaries</li>
+<li>Modularize into independent, self-contained systems</li>
+<li>Separate micro and macro architectures</li>
+<li>Be aware of changing quality goals</li>
+<li>Strike a balance between control and decentralization</li>
+</ul>
+
+<p><a name="2"></a></p>
+
+<h2>State of the Art in Microservices</h2>
+
+<p><em><a href="https://twitter.com/adrianco">Adrian Cockcroft</a></em> — cloud architect at Netflix</p>
+
+<p><strong><a href="http://www.slideshare.net/adriancockcroft/dockercon-state-of-the-art-in-microservices">Slides</a></strong></p>
+
+<ul>
+<li>Everyone seems to be accepted the use of clouds.</li>
+<li>Docker is now good for development and testing, will become a big thing in production by the end of 2015 (go check it!)</li>
+</ul>
+
+<h3>Product Development Processes</h3>
+
+<p>Assumption: process prevents problems.
+Organization build up slow, complex &ldquo;Scar tissue&rdquo; processes.</p>
+
+<p>Continuous Delivery:</p>
+<pre class="highlight plaintext"> Observe → Orient
+    ↑        ↓
+   Act   → Decide
+</pre>
+
+<ul>
+<li>Observe: competitive move, measure customers, customer pain point, land grab opportunity (innovation)</li>
+<li>Orient: analysis, model hypoteses (big data)</li>
+<li>Decide: plan response, share plans (culture)</li>
+<li>Act: automatic deplot, launch A/B test, incremental features (cloud)</li>
+</ul>
+
+<h3>Breaking Down the SILOs</h3>
+<pre class="highlight plaintext">Prod. manager → Devs → DBA → QA → Sys. adm. → Netw. adm.
+</pre>
+
+<p><strong>Build dev teams as micro-services too!</strong></p>
+
+<ul>
+<li>Each team is small, self-contained, consists of devs, prod. manager, QA, DBA.</li>
+<li>System administration team becomes a platform team.</li>
+</ul>
+
+<h3>Run what you wrote</h3>
+
+<ul>
+<li>Pagerduty to detect problems before deployment.</li>
+<li>Use site availability metrics to measure the reliability.</li>
+</ul>
+
+<p><strong>Disruptor: continuous delivery of containerized microservices</strong></p>
+
+<p><em>READ: <a href="http://www.amazon.com/The-Phoenix-Project-Helping-Business/dp/0988262592">The Phoenix Project</a></em></p>
+
+<p><strong>Microservice</strong> — a loosely coupled service oriented architecture with bounded context.</p>
+
+<p>If every service has to be updated at the same time, it&rsquo;s not loosely coupled.</p>
+
+<p><strong>Coupling concerns:</strong></p>
+
+<ul>
+<li>Conway&rsquo;s Law — organizational coupling</li>
+<li>Centralized Database Schemas</li>
+</ul>
+
+<p>  <strong>Bad news:</strong> no normalized databases anymore, application-level transactions — deal with it™.</p>
+
+<ul>
+<li>Enterprise Service Bus — centralized message queues</li>
+</ul>
+
+<p>  XML <em>–40x→</em> JSON <em>–10x→</em> ProtoBuf <em>–10x→</em> Simple binary encoding</p>
+
+<ul>
+<li>Inflexible Protocol Versioning</li>
+</ul>
+
+<h3>Non-Desruptive Production Updates</h3>
+
+<ul>
+<li>&ldquo;Immutable code&rdquo; service pattern
+
+<ul>
+<li>Exsiting services are unchanged, old code remains in service</li>
+<li>New code deploys as a new service group</li>
+<li>No impact on other service groups</li>
+</ul></li>
+<li>&hellip;</li>
+</ul>
+
+<h3>Speeding-up the platform</h3>
+
+<p>AWS Lambda — runs a container per each request.</p>
+
+<table><thead>
+<tr>
+<th></th>
+<th>Datacenter snowflakes</th>
+<th>Virtualized and cloud</th>
+<th>Docker containers</th>
+<th>AWS Lambda</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Deploy</td>
+<td>months</td>
+<td>minutes</td>
+<td>seconds</td>
+<td>milliseconds</td>
+</tr>
+<tr>
+<td>Life time</td>
+<td>years</td>
+<td>weeks</td>
+<td>minutes/hours</td>
+<td>seconds</td>
+</tr>
+</tbody></table>
+
+<h3>State of the art in web scale microservice architectures</h3>
+
+<p>Microservice concerns</p>
+
+<ul>
+<li>Tooling</li>
+<li>Configuration (Decider)</li>
+<li>Discovery (Finagle, Zookeeper, go-platform)</li>
+<li>Routing (Finagle, Akka, go-platform)</li>
+<li>Observability</li>
+<li>Datastores (memcached, Cassandra)</li>
+<li>Manual orchestration (Asgard)</li>
+</ul>
+
+<p><em>CHECK go-platform, <a href="https://github.com/adrianco/spigo">spigo</a></em></p>
+
+<h3>Orchestration for applications</h3>
+
+<p>Next gen: docker for tooling, eureka/consul for discovery, ribbon/finagle for routing, hystrix for observing</p>
+
+<ul>
+<li>Tooling — docker</li>
+<li>Configuration — eureka/consul</li>
+<li>Discovery</li>
+<li>Routing — ribbon/finagle</li>
+<li>Observability — hystrix</li>
+</ul>
+
+<p><a name="3"></a></p>
+
+<h2>Principles of Microservices</h2>
+
+<p><em><a href="https://twitter.com/samnewman">Sam Newman</a></em></p>
+
+<p><strong>Microservices</strong> — small <strong>autonomous</strong> services that <strong>work together</strong>.</p>
+
+<ol>
+<li>Modelled around business domain</li>
+<li>Culture of automation</li>
+<li>Hide implementation details</li>
+<li>Decentralize all the things</li>
+<li>Deploy independently</li>
+<li>Isolate failure</li>
+<li>Highly observable</li>
+</ol>
+
+<h3>Modelled around business domain</h3>
+
+<p>Decouple business domain and build each service representing its own part.</p>
+
+<h3>Culture of automation</h3>
+
+<p>The number of services grows exponentially, automation is essential.</p>
+
+<ul>
+<li>Infrastructure automation</li>
+<li>Automated testing</li>
+<li>Continuous delivery</li>
+</ul>
+
+<blockquote>
+<p>If you had to think something twice, third time you write a script.</p>
+</blockquote>
+
+<h3>Hide implementation details</h3>
+
+<p>Shared database is a common pattern these days. What we should do instead is a service talking to another service talking to db.</p>
+<pre class="highlight plaintext">Service
+   ↓
+ RDBMS      =&gt;   Service → Service → DB
+   ↑
+Service
+</pre>
+
+<h3>Decentralize all the things</h3>
+
+<p>Devolution of the power:</p>
+
+<ul>
+<li>Self-service and shared governace.</li>
+<li>Owner becomes an operator (except, maybe, hosting decisions — security, etc.)</li>
+<li>Internal open source (apply open-source contribution standards internally: code reviews, pull-requests, etc.)</li>
+<li>Dump pipes, smart endpoints (no more message buses, please)</li>
+</ul>
+
+<h3>Deploy independently</h3>
+
+<p>The hardest one. How to keep self-service when deploying to production?</p>
+
+<ul>
+<li>If there is no way to deploy two services separately, one should consider them to be a single service.</li>
+<li>One service per host: several services on a single host are okay for a short period of time.</li>
+<li>Consumer-driven contacts: consumer (shipping) to define expectations, producer (inventory) to meet them.</li>
+<li>Co-exist endpoints: version them, keep several versions at the same time and let the client to decide which one to use.</li>
+</ul>
+
+<h3>Isolate failure</h3>
+
+<p>Microservices are less reliable, so there <strong>will</strong> be failures.</p>
+<pre class="highlight plaintext">           Strangler app
+
+        /         |        \
+       /          |         \
+      /           |          \
+
+Legacy app   Legacy app   Legacy app
+</pre>
+
+<p>Having a thread pool in a strangler app can be exausted if the legacy app slows down for some reason.</p>
+
+<p>Bulkhead — downstream connections:</p>
+
+<ul>
+<li>Split thread pools</li>
+<li>Back up thread pools with circuit breakers</li>
+</ul>
+
+<blockquote>
+<p>Buckhead your system to make sure you can isolate the failure quickly.</p>
+</blockquote>
+
+<h3>Highly observable</h3>
+
+<p>Non-prod tests and bechmarks are just bogus.</p>
+
+<ul>
+<li>Aggregation of logs (logstash/kibana)</li>
+<li>Aggregation of stats</li>
+<li>Correlation IDs
+
+<ul>
+<li>Generate an ID for each request and pass it over services, put it to the log to trace later.</li>
+</ul></li>
+</ul>
+
+<p><em>! READ <a href="http://buildingmicroservices.com">Building Microservices</a></em></p>
+
+<!-- Discount code: AUTHD -->
+
+    </article>
+  </body>
+</html>
