@@ -299,6 +299,10 @@ dl {
   box-sizing: border-box; }
 
 /* line 1, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/partials/_layout.scss */
+body {
+  padding: 20px 0; }
+
+/* line 5, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/partials/_layout.scss */
 article {
   max-width: 43.75em;
   margin-left: auto;
