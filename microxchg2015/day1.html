@@ -26,12 +26,12 @@
 <p><em><a href="https://twitter.com/caolite_oconnor">Caolite O&#39;Connor</a> — developer at ITV (British television company)</em></p>
 
 <h3>Split into a set of bounded contexts</h3>
-<pre class="highlight plaintext">     ----&gt; Domain (e.g. catalogue) -    +-------+
+<pre class="highlight plaintext"><code>     ----&gt; Domain (e.g. catalogue) -    +-------+
     /                               \   |       |
 App -----&gt; Domain --------------------&gt; | Cache | -&gt; User
     \                               /   |       |
      ----&gt; Domain ------------------    +-------+
-</pre>
+</code></pre>
 
 <ol>
 <li>Organisationla boundaries work best.</li>
@@ -151,34 +151,34 @@ App -----&gt; Domain --------------------&gt; | Cache | -&gt; User
 <li>Require a version request parameter</li>
 <li>Require a version in the accept header media type</li>
 </ul>
-<pre class="highlight plaintext">  HTTP GET:
+<pre class="highlight plaintext"><code>  HTTP GET:
 
   https://api.example.com/some/resource
   Accept: application/vnd.my+awesome+type+hal+json;version=1
-</pre>
+</code></pre>
 
 <h4>Content negotiation</h4>
 
 <ol>
 <li>Web browser makes a standard request.</li>
 </ol>
-<pre class="highlight plaintext">  HTTP GET:
+<pre class="highlight plaintext"><code>  HTTP GET:
 
   https://api.example.com/some/resource
   Accept: text/html
-</pre>
+</code></pre>
 
 <ol>
 <li>Respond with the content of type, provided in <code>Accept</code> header.</li>
 </ol>
-<pre class="highlight html">  Context-Type: text/html;encoding=utf-8
+<pre class="highlight html"><code>  Context-Type: text/html;encoding=utf-8
 
   <span class="nt">&lt;html&gt;</span>
     <span class="nt">&lt;body&gt;</span>
       <span class="nt">&lt;h1&gt;</span>Resource<span class="nt">&lt;/h1&gt;</span>
     <span class="nt">&lt;/body&gt;</span>
   <span class="nt">&lt;/html&gt;</span>
-</pre>
+</code></pre>
 
 <p><a name="2"></a></p>
 
@@ -391,8 +391,8 @@ and replay them later. No need of of atomic update+publish.</p>
 <p><em><a href="https://twitter.com/dhpts">Dustin Huptas</a> &amp; <a href="https://twitter.com/aschmidt75">Andreas Schmidt</a></em></p>
 
 <p>Evolution of infrastructure over last years:</p>
-<pre class="highlight plaintext">Physical servers → virtual servers → containers → dynamic workloads
-</pre>
+<pre class="highlight plaintext"><code>Physical servers → virtual servers → containers → dynamic workloads
+</code></pre>
 
 <p><strong>Dev:</strong></p>
 
@@ -458,8 +458,8 @@ and replay them later. No need of of atomic update+publish.</p>
 <li>haproxy</li>
 <li>…</li>
 </ul>
-<pre class="highlight plaintext">discovery = proxying(template(values))
-</pre>
+<pre class="highlight plaintext"><code>discovery = proxying(template(values))
+</code></pre>
 
 <h3>Dependencies</h3>
 

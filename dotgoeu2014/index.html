@@ -179,17 +179,17 @@ a subset of <code>methods(T)</code>.</p>
 necessary true.</p>
 
 <p>Interface is a tuple <code>(type, value)</code>.</p>
-<pre class="highlight go"><span class="k">var</span><span class="x"> </span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">Person</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">nil</span><span class="x">
+<pre class="highlight go"><code><span class="k">var</span><span class="x"> </span><span class="n">p</span><span class="x"> </span><span class="o">*</span><span class="n">Person</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="no">nil</span><span class="x">
 </span><span class="k">var</span><span class="x"> </span><span class="n">f</span><span class="x"> </span><span class="n">Stringer</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">p</span><span class="x">
 
 </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%v"</span><span class="p">,</span><span class="x"> </span><span class="n">p</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="no">nil</span><span class="p">)</span><span class="x"> </span><span class="c">// "true"</span><span class="x">
 </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%v"</span><span class="p">,</span><span class="x"> </span><span class="n">s</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="no">nil</span><span class="p">)</span><span class="x"> </span><span class="c">// "false"</span><span class="x">
-</span></pre>
+</span></code></pre>
 
 <p>In this case <code>f</code> is <code>(*Person, nil)</code> which is not <code>nil</code>.</p>
 
 <p>The following example outputs <code>&lt;nil&gt;</code>.</p>
-<pre class="highlight go"><span class="k">func</span><span class="x"> </span><span class="n">Do</span><span class="p">()</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="p">{</span><span class="x">
+<pre class="highlight go"><code><span class="k">func</span><span class="x"> </span><span class="n">Do</span><span class="p">()</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="p">{</span><span class="x">
   </span><span class="k">var</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">*</span><span class="n">doError</span><span class="x">
   </span><span class="c">// ...</span><span class="x">
 
@@ -201,7 +201,7 @@ necessary true.</p>
     </span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="p">)</span><span class="x">
   </span><span class="p">}</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></pre>
+</span></code></pre>
 
 <p><a name="6"></a></p>
 
@@ -218,7 +218,7 @@ necessary true.</p>
 
 <p>Go version has been generalized and reused by introducing a <code>Task</code> interface and a
 factory building a specific type of tasks.</p>
-<pre class="highlight go"><span class="k">type</span><span class="x"> </span><span class="n">Task</span><span class="x"> </span><span class="p">{</span><span class="x">
+<pre class="highlight go"><code><span class="k">type</span><span class="x"> </span><span class="n">Task</span><span class="x"> </span><span class="p">{</span><span class="x">
   </span><span class="n">Run</span><span class="p">()</span><span class="x"> </span><span class="n">Result</span><span class="x">
 </span><span class="p">}</span><span class="x">
 
@@ -235,7 +235,7 @@ factory building a specific type of tasks.</p>
 </span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
   </span><span class="n">doStuff</span><span class="p">(</span><span class="o">&amp;</span><span class="n">FactoryImpl</span><span class="p">{})</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></pre>
+</span></code></pre>
 
 <p><a name="7"></a></p>
 
@@ -325,19 +325,19 @@ default configuration?</li>
 <li>Pass <code>nil</code> as a configuration? Then you pass the config object by reference.</li>
 <li>Variadic configuration? You need a special type etc.</li>
 </ul>
-<pre class="highlight go"><span class="x">    </span><span class="k">func</span><span class="x"> </span><span class="n">NewServer</span><span class="p">(</span><span class="n">addr</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">config</span><span class="x"> </span><span class="o">...</span><span class="n">Config</span><span class="p">)</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">Server</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
+<pre class="highlight go"><code><span class="x">    </span><span class="k">func</span><span class="x"> </span><span class="n">NewServer</span><span class="p">(</span><span class="n">addr</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">config</span><span class="x"> </span><span class="o">...</span><span class="n">Config</span><span class="p">)</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">Server</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
 
     </span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
       </span><span class="n">_</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">NewServer</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">)</span><span class="x">
       </span><span class="n">_</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">NewServer</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">,</span><span class="x"> </span><span class="n">Config</span><span class="p">{})</span><span class="x">
     </span><span class="p">}</span><span class="x">
-</span></pre>
+</span></code></pre>
 
 <ul>
 <li><strong>Solution</strong>: pass functions configuring the server instead of configuration values!</li>
 </ul>
-<pre class="highlight go"><span class="x">    </span><span class="k">func</span><span class="x"> </span><span class="n">NewServer</span><span class="p">(</span><span class="n">addr</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">options</span><span class="x"> </span><span class="o">...</span><span class="k">func</span><span class="p">(</span><span class="o">*</span><span class="n">Server</span><span class="p">))</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">Server</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
-</span></pre>
+<pre class="highlight go"><code><span class="x">    </span><span class="k">func</span><span class="x"> </span><span class="n">NewServer</span><span class="p">(</span><span class="n">addr</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">options</span><span class="x"> </span><span class="o">...</span><span class="k">func</span><span class="p">(</span><span class="o">*</span><span class="n">Server</span><span class="p">))</span><span class="x"> </span><span class="p">(</span><span class="o">*</span><span class="n">Server</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
+</span></code></pre>
 
 <p>Pro-tip: define such functions in the same package to access private fields.</p>
 

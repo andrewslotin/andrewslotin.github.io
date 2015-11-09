@@ -163,24 +163,24 @@
     color: #d01040; }
   /* line 34, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .na {
-    color: teal; }
+    color: #008080; }
   /* line 35, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .nb {
-    color: #0086b3; }
+    color: #0086B3; }
   /* line 36, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .nc {
     color: #445588;
     font-weight: bold; }
   /* line 37, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .no {
-    color: teal; }
+    color: #008080; }
   /* line 38, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .nd {
     color: #3c5d5d;
     font-weight: bold; }
   /* line 39, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .ni {
-    color: purple; }
+    color: #800080; }
   /* line 40, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .ne {
     color: #990000;
@@ -198,10 +198,10 @@
     color: #555555; }
   /* line 44, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .nt {
-    color: navy; }
+    color: #000080; }
   /* line 45, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .nv {
-    color: teal; }
+    color: #008080; }
   /* line 46, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .ow {
     color: #000000;
@@ -259,13 +259,13 @@
     color: #999999; }
   /* line 64, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .vc {
-    color: teal; }
+    color: #008080; }
   /* line 65, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .vg {
-    color: teal; }
+    color: #008080; }
   /* line 66, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .vi {
-    color: teal; }
+    color: #008080; }
   /* line 67, /Users/suddendef/Development/andrewslotin.github.io/source/stylesheets/code.css.scss */
   .highlight .il {
     color: #009999; }

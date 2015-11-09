@@ -96,10 +96,10 @@
 </ol>
 
 <p>Group assets by feature:</p>
-<pre class="highlight plaintext">   assets/stylesheets     assets/my-widget/*.css
+<pre class="highlight plaintext"><code>   assets/stylesheets     assets/my-widget/*.css
    assets/javascripts  →  assets/my-widget/*.js
    ...                    ...
-</pre>
+</code></pre>
 
 <ol>
 <li>A Services Layer</li>
@@ -142,19 +142,19 @@
 </ul>
 
 <p>Don&rsquo;t do this:</p>
-<pre class="highlight javascript">  <span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<pre class="highlight javascript"><code>  <span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
-      <span class="c1">// do stuff
-</span>    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// do stuff</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">recoverOrExit</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
     <span class="p">}</span>
 
     <span class="nx">doCleanup</span><span class="p">()</span>
   <span class="p">});</span>
-</pre>
+</code></pre>
 
 <p>Do that instead:</p>
-<pre class="highlight javascript">  <span class="kd">var</span> <span class="nx">collection</span> <span class="o">=</span> <span class="nx">Observable</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">);</span>
+<pre class="highlight javascript"><code>  <span class="kd">var</span> <span class="nx">collection</span> <span class="o">=</span> <span class="nx">Observable</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">observer</span>   <span class="o">=</span> <span class="nx">Observer</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span>
                      <span class="nx">OnNext</span><span class="err">:</span>   <span class="nx">nextHandler</span><span class="p">,</span>
                      <span class="nx">OnCreate</span><span class="err">:</span> <span class="nx">createHandler</span><span class="p">,</span>
@@ -162,8 +162,8 @@
                    <span class="p">)</span>
 
   <span class="nx">subscription</span> <span class="o">=</span> <span class="nx">observer</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">collection</span><span class="p">);</span>
-  <span class="nx">subscription</span><span class="p">.</span><span class="nx">dispose</span><span class="p">();</span> <span class="c1">// do cleanup
-</span></pre>
+  <span class="nx">subscription</span><span class="p">.</span><span class="nx">dispose</span><span class="p">();</span> <span class="c1">// do cleanup</span>
+</code></pre>
 
 <ul>
 <li>Immutable data.</li>
@@ -186,44 +186,44 @@
 </ul>
 
 <p>E.g.</p>
-<pre class="highlight html">  <span class="c">&lt;!-- Template --&gt;</span>
+<pre class="highlight html"><code>  <span class="c">&lt;!-- Template --&gt;</span>
   <span class="nt">&lt;template&gt;</span>
     <span class="nt">&lt;h1</span> <span class="na">select=</span><span class="s">".title"</span><span class="nt">&gt;&lt;/h1&gt;</span>
     <span class="nt">&lt;p</span> <span class="na">select=</span><span class="s">".body"</span><span class="nt">&gt;&lt;/p&gt;</span>
   <span class="nt">&lt;/template&gt;</span>
 
   <span class="c">&lt;!-- This is how you add previously registered component "my-component" --&gt;</span>
-  <span class="nt">&lt;my</span><span class="na">-component</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;my-component&gt;</span>
     <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"title"</span><span class="nt">&gt;</span>Goes to <span class="ni">&amp;lt;</span>h1<span class="ni">&amp;gt;</span><span class="nt">&lt;/p&gt;</span>
     <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"body"</span><span class="nt">&gt;</span>Goes to <span class="ni">&amp;lt;</span>p<span class="ni">&amp;gt;</span><span class="nt">&lt;/p&gt;</span>
     <span class="nt">&lt;p&gt;</span>Won't be rendered!<span class="nt">&lt;/p&gt;</span>
-  <span class="err">&lt;</span>/my-component&gt;
-</pre>
+  <span class="nt">&lt;/my-component&gt;</span>
+</code></pre>
 
 <ul>
 <li>Shadow DOM</li>
 </ul>
 
 <p>A DOM tree that is &ldquo;disconnected&rdquo; from the <code>document</code>&rsquo;s DOM.</p>
-<pre class="highlight javascript">  <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'div'</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">root</span>      <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">createShadowRoot</span><span class="p">();</span> <span class="c1">// ← behold!
-</span></pre>
+<pre class="highlight javascript"><code>  <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'div'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">root</span>      <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">createShadowRoot</span><span class="p">();</span> <span class="c1">// ← behold!</span>
+</code></pre>
 
 <p><strong>HOW COOL IS THAT???</strong></p>
 
 <ul>
 <li>Custom elements</li>
 </ul>
-<pre class="highlight javascript">  <span class="kd">var</span> <span class="nx">elemPrototype</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">HTMLElement</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
-  <span class="nx">elemPrototype</span><span class="p">.</span><span class="nx">createdCallback</span> <span class="o">=</span> <span class="p">...;</span> <span class="c1">// Will be called on element create
-</span>
-  <span class="c1">// The name should be unique within the page
-</span>  <span class="kd">var</span> <span class="nx">XHeadline</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">registerElement</span><span class="p">(</span><span class="s2">"my-component"</span><span class="p">,</span> <span class="p">{</span> <span class="na">prototype</span><span class="p">:</span> <span class="nx">elemPrototype</span> <span class="p">});</span>
-</pre>
+<pre class="highlight javascript"><code>  <span class="kd">var</span> <span class="nx">elemPrototype</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">HTMLElement</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+  <span class="nx">elemPrototype</span><span class="p">.</span><span class="nx">createdCallback</span> <span class="o">=</span> <span class="p">...;</span> <span class="c1">// Will be called on element create</span>
+
+  <span class="c1">// The name should be unique within the page</span>
+  <span class="kd">var</span> <span class="nx">XHeadline</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">registerElement</span><span class="p">(</span><span class="s2">"my-component"</span><span class="p">,</span> <span class="p">{</span> <span class="na">prototype</span><span class="p">:</span> <span class="nx">elemPrototype</span> <span class="p">});</span>
+</code></pre>
 
 <p>And than somewhere in HTML:</p>
-<pre class="highlight html">  <span class="nt">&lt;my</span><span class="na">-component</span><span class="nt">&gt;</span><span class="err">&lt;</span>/my-component&gt;
-</pre>
+<pre class="highlight html"><code>  <span class="nt">&lt;my-component&gt;&lt;/my-component&gt;</span>
+</code></pre>
 
 <ul>
 <li>HTML imports</li>

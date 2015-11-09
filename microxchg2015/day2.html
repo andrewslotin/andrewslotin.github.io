@@ -71,8 +71,8 @@
 Context is set by a project bound.</p>
 
 <p>Common approach: 1 project = 1 system? Modularization ends up with splitting into smaller systems.</p>
-<pre class="highlight plaintext">single file → few files → library, class hierarchy → framework + application → multiple applications
-</pre>
+<pre class="highlight plaintext"><code>single file → few files → library, class hierarchy → framework + application → multiple applications
+</code></pre>
 
 <h3>System Characteristics</h3>
 
@@ -235,10 +235,10 @@ Macro architecture — a decision on how do the domain systems interact with eac
 Organization build up slow, complex &ldquo;Scar tissue&rdquo; processes.</p>
 
 <p>Continuous Delivery:</p>
-<pre class="highlight plaintext"> Observe → Orient
+<pre class="highlight plaintext"><code> Observe → Orient
     ↑        ↓
    Act   → Decide
-</pre>
+</code></pre>
 
 <ul>
 <li>Observe: competitive move, measure customers, customer pain point, land grab opportunity (innovation)</li>
@@ -248,8 +248,8 @@ Organization build up slow, complex &ldquo;Scar tissue&rdquo; processes.</p>
 </ul>
 
 <h3>Breaking Down the SILOs</h3>
-<pre class="highlight plaintext">Prod. manager → Devs → DBA → QA → Sys. adm. → Net. adm. → SAN Adm.
-</pre>
+<pre class="highlight plaintext"><code>Prod. manager → Devs → DBA → QA → Sys. adm. → Net. adm. → SAN Adm.
+</code></pre>
 
 <p><strong>Build dev teams as micro-services too!</strong></p>
 
@@ -401,12 +401,12 @@ Organization build up slow, complex &ldquo;Scar tissue&rdquo; processes.</p>
 <h3>Hide implementation details</h3>
 
 <p>Shared database is a common pattern these days. What we should do instead is a service talking to another service talking to db.</p>
-<pre class="highlight plaintext">Service
+<pre class="highlight plaintext"><code>Service
    ↓
  RDBMS      =&gt;   Service → Service → DB
    ↑
 Service
-</pre>
+</code></pre>
 
 <h3>Decentralize all the things</h3>
 
@@ -433,12 +433,12 @@ Service
 <h3>Isolate failure</h3>
 
 <p>Microservices are less reliable, so there <strong>will</strong> be failures.</p>
-<pre class="highlight plaintext">                 --&gt; Legacy app
+<pre class="highlight plaintext"><code>                 --&gt; Legacy app
                 /
 Strangler app &lt;----&gt; Legacy app
                 \
                  --&gt; Legacy app
-</pre>
+</code></pre>
 
 <p>Having a thread pool in a strangler app can be exausted if the legacy app slows down for some reason.</p>
 
