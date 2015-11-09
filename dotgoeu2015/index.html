@@ -1,0 +1,359 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>dotGoEu 2015 Notes</title>
+
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/code.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+
+  <body class="dotgoeu2015 dotgoeu2015_index">
+    <article>
+      <h1>dotGoEu 2015</h1>
+
+<p><em>November 9, 2015, Paris, France</em></p>
+
+<ol>
+<li><a href="#a-case-for-microservices">A case for microservices</a></li>
+<li><a href="#tools-for-working-with-go-code">Tools for working with Go code</a></li>
+<li><a href="#beyond-the-distributed-system">Beyond the Distributed System</a></li>
+<li><a href="#functional-go">Functional Go</a></li>
+<li><a href="#lightning-talks">Lightning Talks</a>
+
+<ul>
+<li><a href="#gopy">Gopy</a></li>
+<li><a href="#encrypt-all-transports">Encrypt all transports</a></li>
+<li><a href="#vossibility">How can I get visibility into my open source projects?</a></li>
+<li><a href="#http-2-support-in-go-1-6">HTTP/2 support in 1.6</a></li>
+</ul></li>
+<li><a href="#go-internals">Go internals</a></li>
+<li><a href="#the-other-side-of-go">The other side of Go</a></li>
+<li><a href="#a-tour-of-the-bleve">A tour of the bleve</a></li>
+<li><a href="#living-with-c">Living with C</a></li>
+<li><a href="#concurrency-in-go-is-not-as-easy-as-it-sounds">Concurrency in Go is not as easy as it sounds</a></li>
+<li><a href="#the-docker-trail">The Docker trail</a></li>
+<li><a href="#simplicity-is-complicated">Simplicity is complicated</a></li>
+</ol>
+
+<p><a name="a-case-for-microservices"></a></p>
+
+<h2>A case for microservices</h2>
+
+<p><em><a href="http://peter.bourgon.org">Peter Bourgon</a></em></p>
+
+<p>Problems:</p>
+
+<ul>
+<li>Distribution &ndash; network overhead, etc.</li>
+<li>Perfomance &ndash; a single slow part slows down the whole system</li>
+<li>Architectural &ndash; code duplication, multiple languages</li>
+<li>Testing &ndash; acceptance testing is hard</li>
+<li>Operations</li>
+</ul>
+
+<p>Go:</p>
+
+<ul>
+<li>Lacks all those nifty features (generics, blah-blah-blah)</li>
+<li>Tooling is awesome</li>
+<li>GC eliminates memory errors</li>
+</ul>
+
+<p>With all its disadvantages microservices architecture has a virtue: The Bounded Context.</p>
+
+<p>Code is sustainable as long as you&rsquo;re able change what you ought to change at any time.</p>
+
+<p>Code <em>is</em> mutable. Great tooling is needed to maintain the code sustainability and maintainability.</p>
+
+<p><a href="http://gokit.io">Go kit</a> &ndash; a set of tools for building and maitaining microservices.</p>
+
+<p><a name="tools-for-working-with-go-code"></a></p>
+
+<h2>Tools for working with Go code</h2>
+
+<p><em><a href="http://arslan.io">Fatih Arslan</a></em></p>
+
+<blockquote>
+<p>Go was designed to make tools easy to write
+<em>Rob Pike</em></p>
+</blockquote>
+
+<h3>Formatting</h3>
+
+<ul>
+<li><code>gofmt</code></li>
+<li><code>goimports</code> &ndash; <code>gofmt</code> + maintaining imports section</li>
+</ul>
+
+<h3>Navigation &amp; insight</h3>
+
+<ul>
+<li><code>godef</code> &ndash; prints the location of the symbol referred to
+<code>
+godef -f main.go fmt.Println
+</code></li>
+<li><code>godepgraph</code> &ndash; dependency graph</li>
+<li><code>oracle</code> &ndash; a tool for answering questions about Go source code
+Freevars mode for method extraction
+<code>
+oracle -pos=main.go:#214 mode &lt;pkgs&gt;
+</code></li>
+</ul>
+
+<h3>Refactoring</h3>
+
+<ul>
+<li><code>gorename</code></li>
+<li><code>gomvpkg</code> &ndash; moves packages, updates references</li>
+<li><code>fiximports</code></li>
+</ul>
+
+<h3>Code generation</h3>
+
+<ul>
+<li><code>stringer</code></li>
+<li><code>jsonenums</code></li>
+<li><code>impl</code> &ndash; generates method stubs for implementing an interface</li>
+</ul>
+
+<h3>Linters and checkers</h3>
+
+<ul>
+<li><code>gometalinter</code> &ndash; <code>govet</code> + <code>errcheck</code> + <code>golint</code></li>
+</ul>
+
+<h3>Testing</h3>
+
+<ul>
+<li><code>benchcmp</code> &ndash; compare benchmark results</li>
+</ul>
+
+<h3>Dependency management</h3>
+
+<ul>
+<li><code>/vendor</code> folder</li>
+</ul>
+
+<p><a name="beyond-the-distributed-system"></a></p>
+
+<h2>Beyond the Distributed System</h2>
+
+<p><em><a href="https://about.me/verolop">Verónica López</a></em></p>
+
+<h3>The reasons why developers are choos choose a programming language</h3>
+
+<ul>
+<li>It&rsquo;s cool</li>
+<li>They saw it on HN</li>
+<li>It&rsquo;s actually a great tool</li>
+<li>Their employeer requires them to use it</li>
+<li>It makes money (means of social progress)</li>
+</ul>
+
+<h3>Developers pyramide</h3>
+
+<ol>
+<li>Contributors</li>
+<li>~Cool projects~people</li>
+<li>Real-life programmers who use the lang for day-to-day tasks</li>
+</ol>
+
+<h3>Reasons why people choose programming languages</h3>
+
+<ul>
+<li>they&rsquo;ve been told to use it at schools</li>
+<li>this is a &ldquo;default&rdquo; language, the one that people coose to in order code fast and (maybe) change it later</li>
+<li>user groups = actual users with many particular interests</li>
+</ul>
+
+<p><a name="functional-go"></a></p>
+
+<h2>Functional Go</h2>
+
+<p><em><a href="http://campoy.cat">Francesc Campoy Flores</a></em></p>
+
+<h3>What is functional programming</h3>
+
+<ul>
+<li>No mutable state &ndash; recursion is significantly slower in Go because there is no tail recursion
+
+<ul>
+<li>simply a choice</li>
+<li>no <code>for</code> loops</li>
+</ul></li>
+<li>Functions are everywhere &ndash; no templates -&gt; passing functions is painful and requires to use <code>interface{}</code> for parameter types
+
+<ul>
+<li>as parameters</li>
+<li>as returned values</li>
+<li>in Go they can be used anywhere</li>
+</ul></li>
+</ul>
+
+<p>Getting rid of <code>interface{}</code> in <code>Map</code> function:</p>
+<pre class="highlight go"><code><span class="k">type</span><span class="x"> </span><span class="n">Func</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">Call</span><span class="p">(</span><span class="k">interface</span><span class="p">{})</span><span class="x"> </span><span class="k">interface</span><span class="p">{}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="n">Map</span><span class="p">(</span><span class="n">f</span><span class="x"> </span><span class="n">Func</span><span class="p">,</span><span class="x"> </span><span class="n">vs</span><span class="x"> </span><span class="k">interface</span><span class="p">{})</span><span class="x"> </span><span class="k">interface</span><span class="p">{}</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="c">// ...</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+
+<p>Functors &ndash; useful to abstract the argument type, e.g.</p>
+<pre class="highlight go"><code><span class="k">type</span><span class="x"> </span><span class="n">List</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="c">// ...</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">list</span><span class="x"> </span><span class="o">*</span><span class="n">List</span><span class="p">)</span><span class="x"> </span><span class="n">Map</span><span class="p">(</span><span class="n">f</span><span class="x"> </span><span class="n">Func</span><span class="p">)</span><span class="x"> </span><span class="o">*</span><span class="n">List</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="c">// ...</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+
+<ul>
+<li>Maps</li>
+<li>Lists</li>
+<li>&hellip;</li>
+</ul>
+
+<h3>Useful functors</h3>
+
+<ul>
+<li><code>Fmap</code> &ndash; map collection given a function</li>
+<li><code>Maybe</code> &ndash; <code>nil</code> value wrapper</li>
+<li><code>Many</code> &ndash; collection container</li>
+</ul>
+
+<h3>FP in Go</h3>
+
+<ul>
+<li>Doable
+
+<ul>
+<li>slower</li>
+<li>requires reflection magic</li>
+</ul></li>
+</ul>
+
+<p><a name="lightning-talks"></a></p>
+
+<h2>Lightning Talks</h2>
+
+<p><a name="gopy"></a></p>
+
+<h3>Gopy</h3>
+
+<p><em><a href="https://github.com/sbinet">Sebastien Binet</a></em></p>
+
+<p><em><a href="https://github.com/sbinet/talks/tree/master/2015/20151109-gopy-dotgo">Slides</a></em></p>
+
+<p><a href="github.com/go-python/gopy">gopy</a> &ndash; build cpython modules out of Go packages. For reasons.</p>
+
+<p><a name="encrypt-all-transports"></a></p>
+
+<h3>Encrypt all transports</h3>
+
+<p><em>[Eleanor McHugh](https://about.me/eleanor</em>mchugh)_</p>
+
+<p>HTTPS -&gt; TLS -&gt; TCP/TLS Client -&gt; UDP/AES Server -&gt; AES/RSA Client</p>
+
+<p><a name="vossibility"></a></p>
+
+<h3>How can I get visibility into my open source projects?</h3>
+
+<p><em><a href="https://github.com/icecrime">Arnaurd Portiere</a></em></p>
+
+<p><a href="https://github.com/icecrime/vossibility-stack">Vossibility</a> provides better visibility for your open source project.</p>
+
+<p><a name="http-2-support-in-go-1-6"></a></p>
+
+<h3>HTTP/2 support in 1.6</h3>
+
+<p><em><a href="https://twitter.com/bradfitz">Brad Fitzpatrick</a></em></p>
+
+<p><a name="go-internals"></a></p>
+
+<h2>Go internals</h2>
+
+<p><em><a href="https://inconshreveable.com">Alan Shreve</a></em></p>
+
+<p>Programming is hard. Reading code is hard. Understanding the mental model of software is hard. Life is hard.</p>
+
+<p><a name="the-other-side-of-go"></a></p>
+
+<h2>The other side of Go</h2>
+
+<p><em><a href="https://twitter.com/ajstarks">Anthony Starks</a></em></p>
+
+<p>SVGGo</p>
+
+<p><a name="a-tour-of-the-bleve"></a></p>
+
+<h2>A tour of the bleve</h2>
+
+<p><em><a href="https://twitter.com/mschoch">Marty Schoch</a></em></p>
+
+<p><a href="https://github.com/blevesearch/bleve">Full-text search with golang</a></p>
+
+<h3>Language-specific analysis</h3>
+
+<ol>
+<li>Tokenization</li>
+<li>Lowercase</li>
+<li>Article Elision</li>
+<li>Remove stop words</li>
+<li>Stemming</li>
+</ol>
+
+<p><a name="living-with-c"></a></p>
+
+<h2>Living with C</h2>
+
+<p><em><a href="http://zentus.com">David Crawshaw</a></em></p>
+
+<h3>Why use C?</h3>
+
+<ul>
+<li>Stdlib still has some C code, but it is rare and optional</li>
+<li>System APIs of mobile OSes are exposed as userland C libraries and cannot be avoided</li>
+</ul>
+
+<p><code>x/mobile/gl</code> is a good example of unavoidable C.</p>
+
+<p><a name="concurrency-in-go-is-not-as-easy-as-it-sounds"></a></p>
+
+<h2>Concurrency in Go is not as easy as it sounds</h2>
+
+<p><em><a href="http://matt.aimonetti.net">Matt Aimonetti</a></em></p>
+
+<p>Sync primitives, channels, etc.</p>
+
+<p><a name="the-docker-trail"></a></p>
+
+<h2>The Docker trail</h2>
+
+<p><em><a href="https://blog.jessfraz.com">Jessica Frazelle</a></em></p>
+
+<ul>
+<li>Do not use <code>bool</code> as a compile-time value.</li>
+<li>The binary can <code>dlopen</code> itself.</li>
+</ul>
+
+<p><a name="simplicity-is-complicated"></a></p>
+
+<h2>Simplicity is complicated</h2>
+
+<p><em>[Rob Pike](https://twitter.com/rob</em>pike)_</p>
+
+<p>By borowwing ideas from each other programming languages becoming more similar to each other.
+Go is different, because it doesn&rsquo;t try to compete in features.</p>
+
+    </article>
+  </body>
+</html>
