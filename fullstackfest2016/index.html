@@ -24,6 +24,8 @@
 <li><a href="#shopify-in-multilple-datacenters">Shopify in Multiple Datacenters</a></li>
 <li><a href="#architectural-patterns-of-resilient-distributed-systems">Architectural Patterns of Resilient Distributed Systems</a></li>
 <li><a href="#unikernels-and-why-they-are-useful-or-not">Unikernels and why they&rsquo;re useful (or not)</a></li>
+<li><a href="#what-did-alphago-do-to-beat-the-strongest-human-go-player">What did AlphaGo do to beat the strongest human Go player?</a></li>
+<li><a href="#how-secure-are-docker-containers">How secure are Docker containers?</a></li>
 </ol>
 
 <p><a name="computing-the-first-100-years"></a></p>
@@ -378,6 +380,74 @@ Only provide strong consistency when required</p>
 <h3>Are they production ready?</h3>
 
 <p>Yes, but be ready to get your hands dirty.</p>
+
+<p><a name="#what-did-alphago-do-to-beat-the-strongest-human-go-player"></a></p>
+
+<h2>What did AlphaGo do to beat the strongest human Go player?</h2>
+
+<p><em><a href="#">Tobias Pfeiffer</a></em></p>
+
+<p>Machine learning and Go 101 (I missed a large part of it to be honest).</p>
+
+<p><a name="how-secure-are-docker-containers"></a></p>
+
+<h2>How secure are Docker containers?</h2>
+
+<p><em>[Ben Hall](https://twitter.com/Ben</em>Hall)_</p>
+
+<p>What happens when you give anonymous unrestricted access to a hosted Docker daemon?</p>
+
+<p>Dockerfile:
+<code>
+RUN adduser &lt;new user&gt;
+USER &lt;new user&gt;
+</code></p>
+
+<p>Run container:
+<code>
+$ docker run -u &lt;new user&gt;
+</code></p>
+
+<p>Also this gives an access to host&rsquo;s network, as well as D-Bus, and thus insecure:
+<code>
+$ docker run -it --net=host ubuntu bash
+</code></p>
+
+<h2>Limit a container to a share of the resource</h2>
+<pre class="highlight plaintext"><code>--cpu-shares
+--cpuset-cpus
+--memory-resetvation
+--kernel-memory
+...
+</code></pre>
+
+<h3>Elevation of privileges</h3>
+
+<p>An existing <code>setuid(0) &amp;&amp; setgid(0)</code> exploit:
+<code>
+$ docker run --uid=$(id -u) --security-opt=no-new-priveleges
+</code></p>
+
+<h3>Read-only containers</h3>
+<pre class="highlight plaintext"><code>$ docker run --read-only \                          # Make container FS read-only
+             --security-opt="no-new-priveleges \    # Disallow elevation of priveleges
+             --security-opt="apparmor:es-profile" \ # Use elasticsearch security profile
+             -v /data:/data
+             elasticsearch
+</code></pre>
+
+<p>So Is Docker Secure? Yes, it is but only as secure as your practices.</p>
+
+<p><a href="http://DockerBench.com">A security benchmark and analyzer for Docker</a></p>
+
+<h3>How secure are containers?</h3>
+
+<ul>
+<li>Docker has strong defaults</li>
+<li>Nothing is really secure</li>
+<li>Potential exploits via Linux Kernel</li>
+<li>Run DockerBench.com</li>
+</ul>
 
     </article>
   </body>
