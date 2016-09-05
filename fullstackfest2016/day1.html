@@ -1,0 +1,456 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Fullstack Fest 2016. Day 1</title>
+
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/code.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+
+  <body class="fullstackfest2016 fullstackfest2016_day1">
+    <article>
+      <h1>Fullstack Fest 2016</h1>
+
+<p><em>September 5, 2016, Barcelona, Spain</em></p>
+
+<ol>
+<li><a href="#computing-the-first-100-years">Computing: the First 100 Years</a></li>
+<li><a href="#shopify-in-multilple-datacenters">Shopify in Multiple Datacenters</a></li>
+<li><a href="#architectural-patterns-of-resilient-distributed-systems">Architectural Patterns of Resilient Distributed Systems</a></li>
+<li><a href="#unikernels-and-why-they-are-useful-or-not">Unikernels and why they&rsquo;re useful (or not)</a></li>
+<li><a href="#what-did-alphago-do-to-beat-the-strongest-human-go-player">What did AlphaGo do to beat the strongest human Go player?</a></li>
+<li><a href="#how-secure-are-docker-containers">How secure are Docker containers?</a></li>
+</ol>
+
+<p><a name="computing-the-first-100-years"></a></p>
+
+<h2>Computing: the First 100 Years</h2>
+
+<p><em><a href="#">Joe Armstrong</a></em></p>
+
+<p>A nice talk on the history of computers.</p>
+
+<h3>Computers</h3>
+
+<ul>
+<li>1975: Cray 1 - the most advanced supercomputer back in 1975</li>
+<li>1975: Vax 11/780 = 0.00625 x Cray 1</li>
+<li>2014: iPhone 6 = 256 x Cray 1</li>
+<li>2015: Raspberry Pi 3 = 15 x Cray 1</li>
+<li>2016: Nvidia Tesla P100 = 66250 x Cray 1</li>
+<li>ca. 5 million years ago: Human Brain = 2.85E8 x Cray 1</li>
+</ul>
+
+<h3>Hardware from 1948-2016</h3>
+
+<ul>
+<li>TFlops CPU</li>
+<li>TBytes+ memory</li>
+<li>Connectivity is limited by laws of physics (LiFi)</li>
+<li>Consists of billions of small communicating deivces</li>
+</ul>
+
+<h3>Dangers</h3>
+
+<ol>
+<li>Saving history - perisisting data for decades and centuries is a problem
+
+<ul>
+<li>Storage</li>
+<li>Naming</li>
+</ul></li>
+</ol>
+
+<ul>
+<li><a href="https://ipfs.io/">IPFS</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Kademlia">Kademlia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Self-certifying_File_System">Self-certifying File System</a>
+
+<ol>
+<li>Computational power</li>
+</ol></li>
+<li>A computer built into a solar panel.</li>
+</ul>
+
+<p><a name="shopify-in-multilple-datacenters"></a></p>
+
+<h2>Shopify in Multiple Datacenters</h2>
+
+<p><em><a href="https://twitter.com/sirupsen">Simon Eskildsen</a></em></p>
+
+<p><a href="https://speakerdeck.com/sirupsen/full-stack-fest-2016-shopify-in-multiple-datacenters">Slides</a></p>
+
+<p>The Flash Sale Problem &ndash; 3-4x req/s peaks.</p>
+
+<h3>Single Tenant vs Multi Tenant solutions</h3>
+
+<p>Single Tenant:
++ Isolation
++ Scalability</p>
+
+<p>Multi Tenant:
++ Capacity
++ Utilization
++ Good for flash sales
++ Cheaper</p>
+
+<h3>The Golden Middle?</h3>
+
+<ul>
+<li>First steps
+
+<ul>
+<li>Vertical scaling</li>
+<li>Performance optimizations</li>
+<li>Caching</li>
+<li>Throttling</li>
+</ul></li>
+<li>Database sharding</li>
+<li><p>Resilience</p>
+
+<blockquote>
+<p>errors ~ surface area</p>
+
+<p>platform surface area = time * scale</p>
+</blockquote>
+
+<p><strong>Resilience Maturity Pyramid</strong></p>
+
+<p><img alt="Resilience pyramid" src="/images/resilience-pyramid.jpg" /></p></li>
+<li><p>Multiple DCs</p>
+
+<ul>
+<li>Zero-downtime migrations.</li>
+</ul></li>
+<li><p>Pods</p></li>
+</ul>
+
+<p><strong>Pod</strong> &ndash; an isolated group of shops (DB only):
+  - Workers
+  - KV store
+  - Cache
+  - Shard</p>
+
+<p>Goal is to run pods in multiple DCs.</p>
+
+<ul>
+<li>Pods have all benefits of multi tenant approach while being isolated (within a single pod) and scalable.</li>
+<li>Flash sales: leveraging platform size to steal capacity from other pods when required.
+<em>&ldquo;Borrowing&rdquo; workers</em></li>
+</ul>
+
+<p>API routing and load-balancing via <a href="https://openresty.org/en/">openresty</a>:</p>
+
+<blockquote>
+<p>openresty = nginx + lua + ❤️</p>
+</blockquote>
+
+<p><strong>Rules</strong>
+  1. Any request must be annotated with a pod or shop.
+  2. Any request can only touch one pod.</p>
+
+<h4>Shitlist-driven development</h4>
+
+<p>Instead of deprecating certain API method whitelist valid ones.</p>
+
+<h3>Q&amp;A</h3>
+
+<p>Q: Sharded transactions?
+A: They are isolated, so no cross-shard transactions.</p>
+
+<p>Q: Microservices?
+A: Seems to be an overcompensation.</p>
+
+<p>Q: How to handle pod deployments?
+A: Deploying all at once works for now, but would like to make them independent in future.</p>
+
+<p>Q: Kubernetes?
+A: No.</p>
+
+<p><a name="architectural-patterns-of-resilient-distributed-systems"></a></p>
+
+<h2>Architectural Patterns of Resilient Distributed Systems</h2>
+
+<p><em><a href="https://twitter.com/randommood">Ines Sombra</a></em></p>
+
+<p><a href="http://www.slideshare.net/InesSombra/architectural-patterns-of-resilient-distributed-systems">Slides</a> same talk but from 2015.
+<a href="https://github.com/Randommood/FullStackFest2016">GitHub repo</a> of the talk.</p>
+
+<p><strong>Resilience</strong> is the ability of a sustem to adapt or keep working when challenges occur.</p>
+
+<h3>How can we construct more resilient systems?</h3>
+
+<ul>
+<li>Yield &ndash; how much information I can get back from my system.</li>
+</ul>
+
+<p>Focus on yield rather than uptime.</p>
+
+<ul>
+<li>Harvest &ndash; fraction of the complete result.</li>
+</ul>
+
+<blockquote>
+<p>harvest = data available / total data</p>
+</blockquote>
+
+<h4>Probabilistic Availability</h4>
+
+<ul>
+<li>Graceful harvest degradation</li>
+<li>Randomness to make the worst-case &amp; average-case the same</li>
+<li>Replication of high-priority data for greater harvest control</li>
+<li>&hellip;</li>
+</ul>
+
+<h4>Decomposition &amp; Orthogonality</h4>
+
+<p>Decompose into subsystems intolerant to harvest degradation
+Only provide strong consistency when required</p>
+
+<blockquote>
+<p>If your system favors yield or harvest is an outcome of its design.</p>
+</blockquote>
+
+<h4>Cook&rsquo;s model</h4>
+
+<ul>
+<li>Mentoring</li>
+<li>Responding</li>
+<li>Adapting</li>
+<li>Learning</li>
+</ul>
+
+<p>System safety is about what can happen, where the operating point is and what&rsquo;s the error margin.</p>
+
+<h4>Engineering system resilience</h4>
+
+<ul>
+<li>Continuous maintenance</li>
+<li>Reveal control to opeators</li>
+<li>Know it&rsquo;s going to be used in the ways you never intend</li>
+</ul>
+
+<h4>Borrill&rsquo;s Model</h4>
+
+<blockquote>
+<p>Failre areas need != strategies</p>
+</blockquote>
+
+<ul>
+<li>Classical engineering</li>
+<li>Reactive operations</li>
+<li>Unknown-unknown</li>
+</ul>
+
+<h3>Resilience in industry</h3>
+
+<ul>
+<li>Chubby lock by Google
+
+<ul>
+<li>centralized services are hard to contruct</li>
+<li>engineers don&rsquo;t understand distributed systems</li>
+</ul></li>
+<li>ChaosMonkey by Netflix</li>
+<li>Fastly
+
+<ul>
+<li><a href="https://www.fastly.com/blog/building-fast-and-reliable-purging-system">Powderhorn</a> by fastly</li>
+<li>ImageOpto</li>
+<li>Design error types &amp; graceful handling of them</li>
+<li>Failure detection &amp; system operability are ongoing concerns</li>
+<li>Mixed-mode &amp; versioning of data structures</li>
+<li>Validation &amp; system adaptability</li>
+</ul></li>
+</ul>
+
+<h3>Wrapping up</h3>
+
+<ul>
+<li>Redundancies are the key</li>
+<li>Gossip/epidemic protocols</li>
+<li>Capacity planning matters</li>
+</ul>
+
+<blockquote>
+<p>Optimizations can make your systems less resilient!</p>
+</blockquote>
+
+<p>Operations matter</p>
+
+<ul>
+<li>We&rsquo;re always guessing</li>
+<li>Complex ops leads to less resilient system</li>
+<li>You design operability too</li>
+</ul>
+
+<p>Not all complexity is bad</p>
+
+<ul>
+<li>Increases safety</li>
+<li>Adding resilience may come at the cost of other desired goals (perfomance, simplicity, etc)</li>
+</ul>
+
+<p>Leverage engineering best practice</p>
+
+<ul>
+<li>Test!</li>
+<li>Version from the begininng!</li>
+<li>Mixed-mode ops need to be common (upgrades &amp; evolvability are still tricky)</li>
+</ul>
+
+<p><a name="unikernels-and-why-they-are-useful-or-not"></a></p>
+
+<h2>Unikernels and Why They&rsquo;re Useful (or not)</h2>
+
+<p><em><a href="https://twitter.com/amirmc">Amir Chaudhry</a></em></p>
+
+<p>Code you <strong>care</strong> about / code the OS <strong>insists</strong> you need = 1/9.</p>
+
+<ul>
+<li>Disentangle apps from ths OS</li>
+<li>Break up OS libs into modular components</li>
+<li>Link only system functionality</li>
+<li>Target alternative platforms</li>
+</ul>
+
+<blockquote>
+<p>// Unikernels wiki quote</p>
+</blockquote>
+
+<p>Two approaches</p>
+
+<ol>
+<li>Consider legacy
+
+<ul>
+<li>&hellip;</li>
+</ul></li>
+<li>Clean slate approach (from the ground)
+
+<ul>
+<li>Mirage OS</li>
+<li>IncludeOS</li>
+</ul></li>
+</ol>
+
+<h5>MirageOS</h5>
+
+<ul>
+<li>Written in OCaml</li>
+<li>Everything is a library</li>
+<li>Swapping system libraries allows to target different platforms</li>
+</ul>
+
+<p>Familiar development cycle, while being flexible with the choice of target platform.</p>
+
+<h3>Unikernels recap</h3>
+
+<ul>
+<li>Highly specialized</li>
+<li>Continuum with containers</li>
+<li>Robust deployments</li>
+<li>Everything is a library!</li>
+</ul>
+
+<h3>When should you use unikernels?</h3>
+
+<p>Microservices:</p>
+
+<ul>
+<li>Single service</li>
+<li>Distributed system</li>
+<li>Independent deployment</li>
+<li>Diversity of test choices</li>
+</ul>
+
+<h3>Pathway</h3>
+
+<ol>
+<li>Detect boundary lines in your monolith</li>
+<li>Break it up into microservices</li>
+<li>Turn each into a unikernel</li>
+</ol>
+
+<h3>Are they production ready?</h3>
+
+<p>Yes, but be ready to get your hands dirty.</p>
+
+<p><a name="#what-did-alphago-do-to-beat-the-strongest-human-go-player"></a></p>
+
+<h2>What did AlphaGo do to beat the strongest human Go player?</h2>
+
+<p><em><a href="#">Tobias Pfeiffer</a></em></p>
+
+<p>Machine learning and Go 101 (I missed a large part of it to be honest).</p>
+
+<p><a name="how-secure-are-docker-containers"></a></p>
+
+<h2>How secure are Docker containers?</h2>
+
+<p><em>[Ben Hall](https://twitter.com/Ben</em>Hall)_</p>
+
+<p>What happens when you give anonymous unrestricted access to a hosted Docker daemon?</p>
+
+<p>Dockerfile:
+<code>
+RUN adduser &lt;new user&gt;
+USER &lt;new user&gt;
+</code></p>
+
+<p>Run container:
+<code>
+$ docker run -u &lt;new user&gt;
+</code></p>
+
+<p>Also this gives an access to host&rsquo;s network, as well as D-Bus, and thus insecure:
+<code>
+$ docker run -it --net=host ubuntu bash
+</code></p>
+
+<h2>Limit a container to a share of the resource</h2>
+<pre class="highlight plaintext"><code>--cpu-shares
+--cpuset-cpus
+--memory-resetvation
+--kernel-memory
+...
+</code></pre>
+
+<h3>Elevation of privileges</h3>
+
+<p>An existing <code>setuid(0) &amp;&amp; setgid(0)</code> exploit:
+<code>
+$ docker run --uid=$(id -u) --security-opt=no-new-priveleges
+</code></p>
+
+<h3>Read-only containers</h3>
+<pre class="highlight plaintext"><code>$ docker run --read-only \                          # Make container FS read-only
+             --security-opt="no-new-priveleges \    # Disallow elevation of priveleges
+             --security-opt="apparmor:es-profile" \ # Use elasticsearch security profile
+             -v /data:/data
+             elasticsearch
+</code></pre>
+
+<p>So Is Docker Secure? Yes, it is but only as secure as your practices.</p>
+
+<p><a href="http://DockerBench.com">A security benchmark and analyzer for Docker</a></p>
+
+<h3>How secure are containers?</h3>
+
+<ul>
+<li>Docker has strong defaults</li>
+<li>Nothing is really secure</li>
+<li>Potential exploits via Linux Kernel</li>
+<li>Run DockerBench.com</li>
+</ul>
+
+    </article>
+  </body>
+</html>
