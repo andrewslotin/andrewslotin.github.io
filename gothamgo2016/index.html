@@ -1,0 +1,554 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Gotham Go Notes</title>
+
+    <link href="/stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/all.css" rel="stylesheet" type="text/css" /><link href="/stylesheets/code.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+
+  <body class="gothamgo2016 gothamgo2016_index">
+    <article>
+      <ol>
+<li><a href="#codebase-refactoring">Codebase Refactoring (with help from Go)</a></li>
+<li><a href="#dissection-of-gophers">Dissection of Gophers: The Golang Community</a></li>
+<li><a href="#cloning-git-in-go">Cloning Git in Go</a></li>
+<li><a href="#to-go-or-not-to-go">To Go or Not to Go?</a></li>
+<li><a href="#how-to-write-your-own-go-tool">How to Write Your Own Go Tool?</a></li>
+<li><a href="#go-at-buzzfeed">10 Times Go was Totally Perfect for BuzzFeed&rsquo;s API Gateway</a></li>
+<li><a href="#how-to-raise-a-gopher-in-record-time">How to Raise a Gopher in Record Time</a></li>
+<li><a href="#demystifying-channels">Demystifying Channels</a></li>
+<li><a href="#building-a-go-debugger">Building a Go Debugger</a></li>
+<li><a href="#quality-tests-in-go">Quality Tests in Go</a></li>
+<li><a href="#how-the-go-project-operates">How the Go Open Source Project&rsquo;s Inards</a></li>
+<li><a href="#mind-the-gap">Mind the Gap</a></li>
+</ol>
+
+<h1>GothamGo 2016</h1>
+
+<p><em>November 18, 2016, New York, USA</em></p>
+
+<p><a name="codebase-refactoring"></a></p>
+
+<h2>Codebase Refactoring (with help from Go)</h2>
+
+<p><i><a href="https://twitter.com/_rsc">Russ Cox</a></i></p>
+
+<h3>Why?</h3>
+
+<ul>
+<li>Split into manageable pieces</li>
+<li>Improve naming</li>
+<li>Lighten dependencies</li>
+<li>Change the dependency graph to avoid circular dependencies</li>
+</ul>
+
+<h3>How?</h3>
+
+<p>size(code repair) &gt;&gt;&gt; size(API change)</p>
+
+<p>Atomic code repair: make API change and code repairs in a single commit.</p>
+
+<ul>
+<li>Easier reviews</li>
+<li>Easier rollbacks</li>
+</ul>
+
+<p>Steps:</p>
+
+<ol>
+<li>Add new API</li>
+<li>Code repairs (use new API)</li>
+<li>Remove old API</li>
+</ol>
+
+<p>Atomical commits may not work for large codebases.</p>
+
+<ol>
+<li>Add new API, <em>interchangeable</em> with old API</li>
+<li>Convert uses of old API to new API</li>
+<li>Remove old API</li>
+</ol>
+
+<ul>
+<li>Moving a Constant
+
+<ul>
+<li>Introduce a new constant in a new package, while keeping the old one</li>
+</ul></li>
+<li>Moving Functions
+
+<ul>
+<li>Call the new function from an old one</li>
+</ul></li>
+<li>Moving Variables
+
+<ul>
+<li>Reuse the value of new var in an old one.</li>
+</ul></li>
+<li>Moving Types
+
+<ul>
+<li><del>Make a type alias from old to a new one</del> Fork Go and modify the compiler.</li>
+</ul></li>
+</ul>
+
+<h3>The Bright Future</h3>
+
+<p>Aliases!</p>
+
+<p>In large codebases, refactoring needs to be able to be done in gradual commits,
+but this cannot be done for types.</p>
+
+<p><a name="dissection-of-gophers"></a></p>
+
+<h2>Dissection of Gophers: The Golang Community</h2>
+
+<p><em><a href="https://twitter.com/cassandraoid">Cassandra Salisbury</a></em></p>
+
+<script async class="speakerdeck-embed" data-id="6506cf8d9468435d83c723adaa650750" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+<ul>
+<li>Dyeversiteee!!! Ineqwaliteee!!!</li>
+<li>Spoke &ldquo;too white&rdquo; and had an afro back when she was a kid in California.</li>
+<li>According to Red Monk Go was ranked to be the same as Visual Basic.</li>
+</ul>
+
+<h3>Why Dyeversitee is Important?</h3>
+
+<ul>
+<li>Diverse teams are smarter and more creative</li>
+<li>Diverse companies can better serve a diverse user base</li>
+<li>Diversity attracts talent</li>
+</ul>
+
+<h3>Is Go Dyeverse?</h3>
+
+<p>Of course not.</p>
+
+<h3>What To Do?</h3>
+
+<p>Be dyeverse.</p>
+
+<p><a name="cloning-git-in-go"></a></p>
+
+<h2>Cloning Git in Go</h2>
+
+<p><em><a href="https://twitter.com/chimeracoder">Aditya Mukerjee</a></em></p>
+
+<script async class="speakerdeck-embed" data-id="230a7ade05b2420792a0822bf618de7c" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+<p><a href="https://github.com/ChimeraCoder/gitgo">gitgo</a> - Git implementated in Go</p>
+
+<ul>
+<li>Git operations from Go apps</li>
+<li>Portability</li>
+<li>Simplicity</li>
+<li>&hellip; why not?</li>
+</ul>
+
+<p>Git is a decentralized, userland filesystem for preserving historical state and synchronizing data.</p>
+<pre class="highlight plaintext"><code>$ man git
+NAME
+       git - the stupid content tracker
+</code></pre>
+
+<p>Commit objects are human-readable (after decompressed) and reference tree objects.</p>
+
+<p>Objects in <code>.git/objects</code> are of 3 types:</p>
+
+<ul>
+<li>commits</li>
+<li>trees</li>
+<li>blobs</li>
+</ul>
+
+<p><code>git checkout</code> just replaces current content with the content of corresponding blob objects.</p>
+
+<p>Packfiles are compressed (using a custom-built almost undocumented algorithm) binary diffs used to compact the changes.</p>
+
+<p>Supplementary read: <a href="https://codewords.recurse.com/issues/three/unpacking-git-packfiles">Unpacking Git Packfiles</a></p>
+
+<p>Findings:</p>
+
+<ul>
+<li>Layered interfaces are more flexible than union types.</li>
+<li>Pay attention to interface contracts.</li>
+<li>Use concurrency to define state machines, and use channels thos the input/output.
+
+<ul>
+<li>Goroutines as states</li>
+<li>Channels represent transitions</li>
+</ul></li>
+<li>Treat errors as values, and ask how they behave.
+
+<ul>
+<li>Make errors typed and handle them based on their kind</li>
+</ul></li>
+<li>Well-architected interfaces perform very well.</li>
+</ul>
+
+<p><a name="to-go-or-not-to-go"></a></p>
+
+<h2>To Go or Not to Go?</h2>
+
+<p><i><a href="https://twitter.com/_peggyli">Peggy Li</a></i></p>
+
+<p>&ldquo;Selling&rdquo; Go as a programming language to go with to your company.</p>
+
+<h3>Considerations before adopting a new tool</h3>
+
+<ul>
+<li>Common sense</li>
+<li>Team unification</li>
+<li>Progress acceleration</li>
+</ul>
+
+<p>A tool should unite an engineering team, if it polarizes it instead - it will fail.</p>
+
+<h3>Keep the big picture in mind</h3>
+
+<ul>
+<li>What you&rsquo;re building?</li>
+<li>Who you&rsquo;re building it for?</li>
+<li>Why are you building it at all?</li>
+</ul>
+
+<h3>Short vs. long-term thinking</h3>
+
+<ol>
+<li>Decide if you&rsquo;re prototyping or building a business?</li>
+<li>Optimize for time to market vs. long-time maintainability and stability</li>
+</ol>
+
+<h3>Why use Go?</h3>
+
+<ul>
+<li>Static binaries
+
+<ul>
+<li>simple deployments</li>
+<li>easier dependency management</li>
+</ul></li>
+<li>Cross-compilation/multi-platform
+
+<ul>
+<li>support more users</li>
+<li>offer consistent experience</li>
+</ul></li>
+<li>Extensieve tooling
+
+<ul>
+<li>focus on building and shipping</li>
+</ul></li>
+<li>Performance</li>
+<li>Simplicity</li>
+</ul>
+
+<h3>Where to use Go?</h3>
+
+<ul>
+<li>Frontend (GopherJS)</li>
+<li>Data-science (GopherDS)</li>
+<li>ML</li>
+<li>Building DSL</li>
+<li>&hellip;</li>
+</ul>
+
+<p><a name="how-to-write-your-own-go-tool"></a></p>
+
+<h2>How to Write Your Own Go Tool?</h2>
+
+<p><em><a href="https://twitter.com/fatih">Fatih Arslan</a></em></p>
+
+<script async class="speakerdeck-embed" data-id="902501f3d5ce4dc68baf24c0c2ec8d99" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+<ul>
+<li><code>go/token</code> defines constants for lexical tokens of Go language
+
+<ul>
+<li><code>Position</code></li>
+<li><code>Token</code></li>
+<li><code>File</code></li>
+<li><code>FileSet</code></li>
+</ul></li>
+<li><code>go/scanner</code> (a.k.a. lexer) reads source code and emits tokens
+
+<ul>
+<li><code>Scanner</code></li>
+</ul></li>
+<li><code>go/ast</code> declares the types used to represent syntax of Go
+
+<ul>
+<li><code>Node</code></li>
+<li><code>Inspect()</code> - traverse an AST in a depth-order and call a visitor function with each node.</li>
+</ul></li>
+<li><code>go/parser</code> parses source code and builds an AST
+
+<ol>
+<li>Start with <code>*go.GenDecl</code></li>
+<li>Continue with <code>valueSpec.Values</code></li>
+<li>Proceed to <code>BinaryExpr</code></li>
+</ol></li>
+<li><code>go/printer</code> prints AST nodes in a human-readable format</li>
+</ul>
+
+<h3>Steps to write a Go tool</h3>
+
+<ol>
+<li>Read with <code>go/parser</code></li>
+<li>Inspect with <code>go/ast</code></li>
+<li>Write out with <code>go/printer</code> or custom format (JSON, text, etc.)</li>
+<li>Create a CLI</li>
+</ol>
+
+<h3>More packages</h3>
+
+<ul>
+<li><code>go/types</code> - a type checker</li>
+<li><code>go/ssa</code> - SSA emitter</li>
+<li>&hellip;</li>
+</ul>
+
+<p><a name="go-at-buzzfeed"></a></p>
+
+<h2>5 Times Go was Totally Perfect for BuzzFeed&rsquo;s API Gateway</h2>
+
+<p><em><a href="https://twitter.com/jonmorehouse">Jon Morehouse</a></em></p>
+
+<ul>
+<li>Prototyping</li>
+<li>Cncurrency</li>
+<li>Stdlib</li>
+<li>Performance</li>
+<li>Future proof</li>
+</ul>
+
+<p><a name="how-to-raise-a-gopher-in-record-time"></a></p>
+
+<h2>How to Raise a Gopher in Record Time</h2>
+
+<p><em><a href="https://twitter.com/tiffanyfayj">Tiffany Jernigan</a></em></p>
+
+<ul>
+<li>Read the docs (<code>go doc</code> is your friend)</li>
+<li>Visit <a href="https://www.socketloop.com">some</a> <a href="https://gobyexample.com">websites</a></li>
+<li>Use Playground to excercise</li>
+<li>Use <code>godef</code> to investigate the code</li>
+</ul>
+
+<p><a name="demystifying-channels"></a></p>
+
+<h2>Demystifying Channels</h2>
+
+<p><em><a href="https://twitter.com/copyconstruct">Cindy Sridharan</a></em></p>
+
+<blockquote>
+<p>Mutexes are to serialize, channels are to orchestrate.</p>
+</blockquote>
+
+<p><em>Rob Pike</em></p>
+
+<p>Channels are just moody queues.</p>
+
+<h3>What is a channel anyway?</h3>
+
+<p>A ring buffer, guarded by a mutex.</p>
+
+<p><a name="building-a-go-debugger"></a></p>
+
+<h2>Building a Go Debugger</h2>
+
+<p><em><a href="https://twitter.com/nullisnt0">Abel Mathew</a></em></p>
+
+<h3>ELF and DWARF</h3>
+
+<p>Inspecting ELF binary:</p>
+<pre class="highlight plaintext"><code>$ go build -o test test.go
+$ readelf -f test
+</code></pre>
+
+<p>ELF file structure:</p>
+<pre class="highlight plaintext"><code>+----------------------+
+|      ELF header      |
++----------------------+
+| Program header table |
++----------------------+
+|        .text         |
++----------------------+
+|       .rodata        |
++----------------------+
++----------------------+
+|        .data         |
++----------------------+
+| Section header table |
++----------------------+
+</code></pre>
+
+<p>Debugger translates program state (registers, memory) into goroutines, variables and
+callstack using debug information.</p>
+
+<p>DWARF format data frames:</p>
+
+<ul>
+<li><code>.debug_line</code> maps memory addresses to line numbers</li>
+<li><code>.debug_info</code> types, variables and fucntions</li>
+<li><code>.debug_frame</code> unwinding information by memory addresses</li>
+</ul>
+
+<p>Inspecting DWARF data:</p>
+<pre class="highlight plaintext"><code>$ readelf --debug-dump=info -f test
+</code></pre>
+
+<h3>What does the debugger do?</h3>
+
+<ol>
+<li>List goroutines</li>
+<li>Unwind callstack</li>
+<li>Resolve variable names</li>
+</ol>
+
+<p><a name="quality-tests-in-go"></a></p>
+
+<h2>Quality Tests in Go</h2>
+
+<p><em><a href="https://medium.com/@matryer">Mat Ryer</a></em></p>
+
+<p>Why write tests?</p>
+
+<ul>
+<li>Demonstrate the intent</li>
+<li><p>Code becomes documentation</p></li>
+<li><p>Don&rsquo;t skip the design step, but write tests before you start the implementation.</p></li>
+<li><p>E2E tests to ensure, unit tests to verify.</p></li>
+<li><p>Shared setup and teardown</p>
+<pre class="highlight plaintext"><code>func setup(t*testing.T) (*db, func()) {
+    // ...
+    return db, db.Close
+}
+</code></pre></li>
+<li><p>Use different package name for tests to prove that your interface is usable.</p>
+
+<blockquote>
+<p>If you don&rsquo;t trust yourself to not use private methods in unit tests, then I cannot help you.</p>
+</blockquote>
+
+<p><em>Dave Cheney</em></p></li>
+<li><p>Interface tests</p></li>
+</ul>
+
+<p><strong>Test code is your code</strong></p>
+
+<ul>
+<li>Treat is as a first class concern</li>
+<li>Look after it</li>
+<li>Clear away old tests</li>
+</ul>
+
+<p><strong>#protip</strong> use interfaces to inject dependencies and mock them in unit tests.</p>
+
+<p><a name="how-the-go-project-operates"></a></p>
+
+<h2>How the Go Open Source Project&rsquo;s Inards</h2>
+
+<p><em><a href="https://twitter.com/bradfitz">Brad Fitzpatrick</a></em></p>
+
+<p>Q: Why not GitHub + Travis?<br/>
+A: Long story:
+    svn -&gt; p4 -&gt; hg -&gt; git,
+    mondrian -&gt; rietveld -&gt; gerrit</p>
+
+<p>Q: What&rsquo;s Go release cycle?<br/>
+A: 6 month: 3 for features + 3 for bugs</p>
+
+<p>Q: Why mailing lists?<br/>
+A: Because we&rsquo;re old</p>
+
+<p>Currently available mailing lists:</p>
+
+<ul>
+<li>golang-nuts@</li>
+<li>golang-announce@</li>
+<li>golang-dev@</li>
+</ul>
+
+<p>Q: Why do you have CLA?<br/>
+A: Neccessary evil</p>
+
+<p><a href="https://build.golang.org">Go build dashboard</a> for different configurations and environments.</p>
+
+<p>Q: So why no Travis?<br/>
+A: Because it doesn&rsquo;t do what we already have. It&rsquo;s getting better,
+   but we already have it and it&rsquo;s written in Go.</p>
+
+<p><a name="mind-the-gap"></a></p>
+
+<h2>Mind the Gap</h2>
+
+<p><em><a href="https://twitter.com/kytrinyx">Katrina Owen</a></em></p>
+
+<p>To do something you need to decide to start and then you need to keep deciding it over and over again.</p>
+
+<blockquote>
+<p>Science knows a lot more about motivation then the life coaches do.</p>
+</blockquote>
+
+<p>Motivation variables:</p>
+
+<ul>
+<li>Subjective value</li>
+<li>Expectation of success</li>
+<li>Environment</li>
+</ul>
+
+<p>To increase achievability:</p>
+
+<ol>
+<li>Have actionable plan</li>
+<li>Believe it will work</li>
+<li>Believe that <strong>you personally</strong> can do it</li>
+</ol>
+
+<p>Experts are not able good resources for beginners - they don&rsquo;t realize how many shortcuts
+they take and how many steps they skip to achieve the goal.</p>
+
+<p>Teaching in small steps with isolated contexts and repetitive small task.</p>
+
+<p><strong>Fluency != Proficiency</strong></p>
+
+<p>Levels of proficiency:</p>
+
+<ul>
+<li>Level 1
+
+<ul>
+<li>Write syntax</li>
+</ul></li>
+<li>Level 2
+
+<ul>
+<li>Simple programs</li>
+</ul></li>
+<li>Level 3
+
+<ul>
+<li>Real-world programming</li>
+</ul></li>
+<li>Level 4
+
+<ul>
+<li>Esoteric and philosophic knowledge about programming</li>
+</ul></li>
+</ul>
+
+<p><a href="http://exercism.io/">exercism.io</a> - level up your programming skills.</p>
+
+    </article>
+  </body>
+</html>
